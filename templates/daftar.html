@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Tiket Kajian Offline MMS 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fdf0fb;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #envelope {
+            width: 350px;
+            background: #ebbeec;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 10px 30px 60px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: #48074e;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid #f1cef1;
+        }
+
+        .btn-custom {
+            background-color: #48074e;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #6a0b73;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="envelope">
+        <h3>Tiket Kajian Offline MMS 2026</h3>
+
+        <form action="/proses_daftar" method="POST">
+            <div class="mb-3">
+                <input type="text" name="nama_input" class="form-control text-center"
+                    placeholder="Masukkan Nama Lengkap" required>
+            </div>
+
+            <div class="mb-3">
+                <select name="kelas_input" class="form-select text-center" required>
+                    <option value="" selected disabled>-- Pilih Angkatan --</option>
+                    <option value="MMS 1">MMS 1</option>
+                    <option value="MMS 2">MMS 2</option>
+                    <option value="MMS 3">MMS 3</option>
+                    <option value="MMS 4">MMS 4</option>
+                    <option value="MMS 5">MMS 5</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-custom w-100 shadow-sm mt-2">
+                Dapatkan QR Code
+            </button>
+        </form>
+    </div>
+
+</body>
+
+</html>

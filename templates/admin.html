@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Rekap Tiket Kajian MMS</h2>
+            <a href="/" class="btn btn-secondary">Ke Scanner</a>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card p-3" style="background-color: #580740; color: white; text-align: center;">
+                    <h5>Total: {{ total }}</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3" style="background-color: #770956; color: white; text-align: center;">
+                    <h5>Masuk: {{ terpakai }}</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3" style="background-color: #350526; color: white; text-align: center;">
+                    <h5>Sisa: {{ sisa }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-white table-striped shadow-sm">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Angkatan</th>
+                    <th>Kode</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in tiket %}
+                <tr>
+                    <td>{{ t.nama }}</td>
+                    <td>{{ t.angkatan }}</td>
+                    <td><code>{{ t.kode }}</code></td>
+                    <td>
+                        {% if t.is_used %}
+                        <span class="badge bg-danger">Sudah Digunakan</span>
+                        {% else %}
+                        <span class="badge bg-success">Belum Digunakan</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        <div class="mt-4">
+            <a href="/reset_semua" class="btn btn-danger btn-sm"
+                onclick="return confirm('Yakin reset semua tiket?')">Reset Semua Data</a>
+        </div>
+    </div>
+</body>
+
+</html>
