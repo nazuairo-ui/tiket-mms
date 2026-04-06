@@ -116,10 +116,13 @@ def logout():
 
 @app.route('/')
 def home():
+    if not current_user.is_authenticated:
+        return redirect(url_for('halaman_daftar'))
     return render_template('index.html', status=None)
 
 
 @app.route('/scan/<kode_tiket>')
+@login_required
 def scan(kode_tiket):
     tiket = Tiket.query.filter_by(kode=kode_tiket).first()
     if not tiket:
@@ -136,6 +139,7 @@ def scan(kode_tiket):
 
 
 @app.route('/cek_manual', methods=['POST'])
+@login_required
 def cek_manual():
     kode = request.form.get('kode_input', '').strip()
     if kode:

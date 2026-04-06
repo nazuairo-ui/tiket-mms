@@ -33,9 +33,6 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="nav-links">
-                    <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
-                        <i class="fas fa-qrcode"></i> Scanner
-                    </a>
                     <a href="/daftar" class="nav-link {% if request.endpoint == 'halaman_daftar' %}active{% endif %}">
                         <i class="fas fa-ticket"></i> Daftar
                     </a>
@@ -43,11 +40,18 @@
                         <i class="fas fa-search"></i> Cek Tiket
                     </a>
                     {% if current_user.is_authenticated %}
+                    <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                        <i class="fas fa-qrcode"></i> Scanner
+                    </a>
                     <a href="/admin" class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}">
                         <i class="fas fa-chart-pie"></i> Dashboard
                     </a>
                     <a href="/logout" class="nav-link">
                         <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    {% else %}
+                    <a href="/login" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+                        <i class="fas fa-sign-in-alt"></i> Login
                     </a>
                     {% endif %}
                 </div>
