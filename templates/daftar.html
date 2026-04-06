@@ -1,90 +1,62 @@
-<!DOCTYPE html>
-<html lang="id">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Tiket Kajian Offline MMS 2026</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}Daftar Tiket — Kajian Offline MMS 2026{% endblock %}
 
-    <style>
-        body {
-            background-color: #fdf0fb;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+{% block content %}
+<div class="fullpage-center" style="padding-top: 1rem; padding-bottom: 3rem;">
+    <div class="envelope-card">
+        <div style="text-align: center; position: relative; z-index: 1;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎟️</div>
+            <h2 style="font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 0.25rem;">
+                Tiket Kajian Offline
+            </h2>
+            <p style="color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; margin-bottom: 1rem;">
+                MMS 2026
+            </p>
+            <div class="divider"></div>
 
-        #envelope {
-            width: 350px;
-            background: #ebbeec;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 10px 30px 60px rgba(0, 0, 0, 0.25);
-            text-align: center;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            color: #48074e;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-
-
-        .form-control,
-        .form-select {
-            border-radius: 10px;
-            border: 1px solid #f1cef1;
-        }
-
-        .btn-custom {
-            background-color: #48074e;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-weight: bold;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-
-        .btn-custom:hover {
-            background-color: #6a0b73;
-            color: white;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div id="envelope">
-        <h3>Tiket Kajian Offline MMS 2026</h3>
-
-        <form action="/proses_daftar" method="POST">
-            <div class="mb-3">
-                <input type="text" name="nama_input" class="form-control text-center"
-                    placeholder="Masukkan Nama Lengkap" required>
+            <!-- Kuota Info -->
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                    <span>Terisi: {{ total_terdaftar }}/{{ kuota }}</span>
+                    <span>Sisa: {{ sisa_kuota }} slot</span>
+                </div>
+                <div class="kuota-bar">
+                    <div class="kuota-bar-fill" style="width: {{ (total_terdaftar / kuota * 100)|int }}%;"></div>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <select name="kelas_input" class="form-select text-center" required>
-                    <option value="" selected disabled>-- Pilih Angkatan --</option>
-                    <option value="MMS 1">MMS 1</option>
-                    <option value="MMS 2">MMS 2</option>
-                    <option value="MMS 3">MMS 3</option>
-                    <option value="MMS 4">MMS 4</option>
-                    <option value="MMS 5">MMS 5</option>
-                </select>
-            </div>
+            <form action="/proses_daftar" method="POST" id="formDaftar">
+                <div style="margin-bottom: 1rem; text-align: left;">
+                    <label class="mms-label">
+                        <i class="fas fa-user" style="color: var(--primary-light);"></i> Nama Lengkap
+                    </label>
+                    <input type="text" name="nama_input" class="mms-input" placeholder="Masukkan nama lengkap" required>
+                </div>
 
-            <button type="submit" class="btn btn-custom w-100 shadow-sm mt-2">
-                Dapatkan QR Code
-            </button>
-        </form>
+                <div style="margin-bottom: 1.5rem; text-align: left;">
+                    <label class="mms-label">
+                        <i class="fas fa-users" style="color: var(--primary-light);"></i> Angkatan
+                    </label>
+                    <select name="kelas_input" class="mms-select" required>
+                        <option value="" selected disabled>— Pilih Angkatan —</option>
+                        <option value="MMS 1">MMS 1</option>
+                        <option value="MMS 2">MMS 2</option>
+                        <option value="MMS 3">MMS 3</option>
+                        <option value="MMS 4">MMS 4</option>
+                        <option value="MMS 5">MMS 5</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="mms-btn mms-btn-primary mms-btn-lg" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-ticket"></i> Dapatkan Tiket
+                </button>
+            </form>
+
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 1.25rem; line-height: 1.5;">
+                <i class="fas fa-info-circle"></i> Setelah mendaftar, Anda akan mendapatkan QR code unik sebagai tiket masuk kajian.
+            </p>
+        </div>
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}

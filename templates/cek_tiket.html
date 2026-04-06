@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Cek Status Tiket — MMS Kajian{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin: 0 auto; padding: 2rem 1rem;">
+
+    <div style="text-align: center; margin-bottom: 1.5rem;" class="animate-fade-in-up">
+        <h1 style="font-size: 1.5rem;">
+            <i class="fas fa-search" style="color: var(--accent-gold);"></i> Cek Status Tiket
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Masukkan kode tiket untuk melihat statusnya</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="mms-card" style="margin-bottom: 1.5rem;">
+        <form method="POST" action="/cek">
+            <div style="margin-bottom: 1rem;">
+                <label class="mms-label">Kode Tiket</label>
+                <input type="text" name="kode_input" class="mms-input" placeholder="Contoh: MMS-A1B2"
+                    value="{{ kode_input }}" required autofocus style="text-align: center; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px;">
+            </div>
+            <button type="submit" class="mms-btn mms-btn-primary mms-btn-lg" style="width: 100%; justify-content: center;">
+                <i class="fas fa-search"></i> Cek Status
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    {% if result.found %}
+    <div class="mms-card animate-scale-in" style="text-align: center; border-top: 4px solid {% if result.is_used %}var(--success){% else %}var(--warning){% endif %};">
+
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+            {% if result.is_used %}✅{% else %}🎟️{% endif %}
+        </div>
+
+        <span class="mms-badge {% if result.is_used %}mms-badge-success{% else %}mms-badge-warning{% endif %}" style="margin-bottom: 1rem; display: inline-flex;">
+            {% if result.is_used %}
+            <i class="fas fa-check-circle"></i> Sudah Hadir
+            {% else %}
+            <i class="fas fa-clock"></i> Belum Hadir
+            {% endif %}
+        </span>
+
+        <div style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-top: 1rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Nama</div>
+                    <div style="font-weight: 600; color: var(--text-dark);">{{ result.nama }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Angkatan</div>
+                    <div style="font-weight: 600; color: var(--text-dark);">{{ result.angkatan }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Waktu Daftar</div>
+                    <div style="font-weight: 500; font-size: 0.88rem;">{{ result.waktu_daftar }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Waktu Scan</div>
+                    <div style="font-weight: 500; font-size: 0.88rem;">{{ result.waktu_scan }}</div>
+                </div>
+            </div>
+            <div style="margin-top: 0.75rem; text-align: center; padding-top: 0.75rem; border-top: 1px solid rgba(107, 76, 122, 0.1);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Kode Tiket</div>
+                <div style="font-family: 'Poppins', monospace; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">{{ result.kode }}</div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="scan-result error animate-scale-in">
+        <div class="result-icon">❌</div>
+        <h3 style="color: var(--danger); margin-bottom: 0.25rem;">Tiket Tidak Ditemukan</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Kode <strong>{{ kode_input }}</strong> tidak terdaftar. Periksa kembali kode tiket Anda.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
