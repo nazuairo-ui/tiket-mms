@@ -1,92 +1,36 @@
-<!DOCTYPE html>
-<html lang="id">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiket Habis - Kajian Offline MMS</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+{% block title %}Kuota Habis — MMS Kajian{% endblock %}
 
-        .card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 380px;
-            width: 90%;
-            border-top: 20px solid #580a55;
+{% block content %}
+<div class="fullpage-center">
+    <div style="max-width: 400px; width: 100%;">
+        <div class="mms-card" style="text-align: center; border-top: 5px solid var(--warning);">
 
-        }
+            <div style="font-size: 3.5rem; margin-bottom: 0.75rem;" class="animate-scale-in">🙏</div>
 
-        .icon {
-            font-size: 70px;
-            margin-bottom: 20px;
-        }
+            <span class="mms-badge mms-badge-warning" style="font-size: 0.82rem; margin-bottom: 1rem; display: inline-flex;">
+                <i class="fas fa-ticket"></i> Kuota Terpenuhi
+            </span>
 
-        .status-badge {
-            display: inline-block;
-            background-color: #e99ae5;
-            color: #580740;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+            <h2 style="font-size: 1.4rem; margin: 0.75rem 0 0.5rem;">Afwan, Akhawat</h2>
 
-        h2 {
-            color: #2c3e50;
-            margin: 0 0 15px 0;
-            font-size: 26px;
-        }
+            <p style="color: var(--text-body); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Terima kasih atas antusiasme antunna! Sayangnya, kuota pendaftaran sudah
+                <strong style="color: var(--primary);">terpenuhi ({{ kuota }}/{{ kuota }})</strong>.
+            </p>
 
-        p {
-            color: #0d0d0e;
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
+            <div style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                    <i class="fas fa-bell" style="color: var(--accent-gold);"></i>
+                    Nantikan informasi kajian berikutnya di group MMS ya!
+                </p>
+            </div>
 
-        .btn-home {
-            display: inline-block;
-            background-color: #040b11;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .btn-home:hover {
-            background-color: #070c11;
-            transform: translateY(-2px);
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="card">
-        <div class="icon">🙏</div>
-        <div class="status-badge">Sudah habis</div>
-        <h2>Afwan Akhawat</h2>
-        <p>Terima kasih atas antusiasme antunna! Sayangnya, kuota pendaftaran sudah <b>terpenuhi (70/70)</b>.</p>
-
-        <a href="/" class="btn-home">Kembali ke Beranda</a>
+            <a href="/" class="mms-btn mms-btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fas fa-home"></i> Kembali ke Beranda
+            </a>
+        </div>
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
