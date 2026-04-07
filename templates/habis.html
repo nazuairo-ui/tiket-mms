@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Kuota Habis — MMS Kajian{% endblock %}
+
+{% block content %}
+<div class="fullpage-center">
+    <div style="max-width: 400px; width: 100%;">
+        <div class="mms-card" style="text-align: center; border-top: 5px solid var(--warning);">
+
+            <div style="font-size: 3.5rem; margin-bottom: 0.75rem;" class="animate-scale-in">🙏</div>
+
+            <span class="mms-badge mms-badge-warning" style="font-size: 0.82rem; margin-bottom: 1rem; display: inline-flex;">
+                <i class="fas fa-ticket"></i> Kuota Terpenuhi
+            </span>
+
+            <h2 style="font-size: 1.4rem; margin: 0.75rem 0 0.5rem;">Afwan, Akhawat</h2>
+
+            <p style="color: var(--text-body); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Terima kasih atas antusiasme antunna! Sayangnya, kuota pendaftaran sudah
+                <strong style="color: var(--primary);">terpenuhi ({{ kuota }}/{{ kuota }})</strong>.
+            </p>
+
+            <div style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                    <i class="fas fa-bell" style="color: var(--accent-gold);"></i>
+                    Nantikan informasi kajian berikutnya di group MMS ya!
+                </p>
+            </div>
+
+            <a href="/" class="mms-btn mms-btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fas fa-home"></i> Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MMS Kajian Offline{% endblock %}</title>
+    <meta name="description" content="Sistem Tiket Digital Kajian Offline MMS 2026">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    {% block navbar %}
+    <nav class="mms-navbar">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="/" class="navbar-brand" style="text-decoration: none;">
+                    Muslimah Mar'ah Shalihah Offline Daurah
+                </a>
+                <button class="navbar-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-links">
+                    <a href="/daftar" class="nav-link {% if request.endpoint == 'halaman_daftar' %}active{% endif %}">
+                        <i class="fas fa-ticket"></i> Daftar
+                    </a>
+                    <a href="/cek" class="nav-link {% if request.endpoint == 'cek_tiket' %}active{% endif %}">
+                        <i class="fas fa-search"></i> Cek Tiket
+                    </a>
+                    {% if current_user.is_authenticated %}
+                    <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                        <i class="fas fa-qrcode"></i> Scanner
+                    </a>
+                    <a href="/admin" class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}">
+                        <i class="fas fa-chart-pie"></i> Dashboard
+                    </a>
+                    <a href="/logout" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    {% else %}
+                    <a href="/login" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container" style="margin-top: 1rem;">
+        {% for category, message in messages %}
+        <div class="mms-alert mms-alert-{{ category }}">
+            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% elif category == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mms-footer">
+        <p>Made with <span class="heart">♥</span> for MMS Daurah Offline 2026</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

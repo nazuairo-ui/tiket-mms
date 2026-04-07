@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Scanner Tiket — MMS Kajian Offline{% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/html5-qrcode"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 550px; margin: 0 auto; padding: 2rem 1rem;">
+
+    <div style="text-align: center; margin-bottom: 1.5rem;" class="animate-fade-in-up">
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">
+            <span style="color: var(--accent-gold);">🌸</span> Scan Tiket Kajian
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Arahkan kamera ke QR code tiket peserta</p>
+        <div class="divider"></div>
+    </div>
+
+    <!-- Scanner -->
+    <div class="mms-card" style="padding: 1rem; margin-bottom: 1.5rem; animation-delay: 0.1s;">
+        <div class="scanner-container">
+            <div id="reader"></div>
+        </div>
+    </div>
+
+    <!-- Scan Result -->
+    {% if status %}
+    <div class="scan-result {% if status == 'berhasil' %}success{% elif status == 'telah terpakai' %}warning{% else %}error{% endif %}" style="margin-bottom: 1.5rem;">
+        {% if status == 'berhasil' %}
+        <div class="result-icon">✅</div>
+        <h3 style="color: var(--success); margin-bottom: 0.5rem;">Alhamdulillah, Berhasil!</h3>
+        <p style="margin-bottom: 0.25rem;">Tiket <strong>{{ kode }}</strong> telah diverifikasi</p>
+        {% if nama_peserta %}
+        <p style="font-size: 0.9rem; color: var(--text-muted);">{{ nama_peserta }} — {{ angkatan_peserta }}</p>
+        {% endif %}
+        {% elif status == 'telah terpakai' %}
+        <div class="result-icon">⚠️</div>
+        <h3 style="color: var(--warning); margin-bottom: 0.5rem;">Tiket Sudah Digunakan</h3>
+        <p style="margin-bottom: 0.25rem;">Kode <strong>{{ kode }}</strong> sudah pernah di-scan</p>
+        {% if nama_peserta %}
+        <p style="font-size: 0.9rem; color: var(--text-muted);">{{ nama_peserta }} — {{ angkatan_peserta }}</p>
+        {% endif %}
+        {% else %}
+        <div class="result-icon">❌</div>
+        <h3 style="color: var(--danger); margin-bottom: 0.5rem;">Tiket Tidak Ditemukan</h3>
+        <p>Kode <strong>{{ kode }}</strong> tidak terdaftar dalam sistem</p>
+        {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+        <a href="/" class="mms-btn mms-btn-outline">
+            <i class="fas fa-redo"></i> Scan Lagi
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Manual Input -->
+    <div class="mms-card" style="animation-delay: 0.2s;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; text-align: center;">
+            <i class="fas fa-keyboard" style="color: var(--primary-light);"></i> Input Manual
+        </h4>
+        <form action="/cek_manual" method="POST">
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" name="kode_input" class="mms-input" placeholder="Masukkan kode tiket..." required style="flex: 1;">
+                <button type="submit" class="mms-btn mms-btn-gold">
+                    <i class="fas fa-check"></i> Cek
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        // If the QR contains a full URL, extract the ticket code
+        if (decodedText.includes('/scan/')) {
+            const parts = decodedText.split('/scan/');
+            window.location.href = "/scan/" + parts[parts.length - 1];
+        } else {
+            window.location.href = "/scan/" + decodedText;
+        }
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            rememberLastUsedCamera: true
+        }
+    );
+    html5QrcodeScanner.render(onScanSuccess);
+</script>
+{% endblock %}

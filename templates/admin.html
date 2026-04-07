@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin — MMS Daurah Offline{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2rem 1rem; max-width: 1200px; margin: 0 auto;">
+
+    <!-- Page Header -->
+    <div class="page-header animate-fade-in-up" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 10;">
+        <div>
+            <h1><i class="fas fa-chart-pie" style="color: var(--accent-gold);"></i> Dashboard Admin</h1>
+            <p>Rekap data tiket kajian offline MMS 2026</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <!-- Export Dropdown -->
+            <div class="export-dropdown">
+                <button class="mms-btn mms-btn-gold" id="exportBtn" onclick="toggleExportMenu()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <div class="export-dropdown-menu" id="exportMenu">
+                    <a href="/export/csv">
+                        <i class="fas fa-file-csv" style="color: var(--success);"></i> Export CSV
+                    </a>
+                    <a href="/export/excel">
+                        <i class="fas fa-file-excel" style="color: #217346;"></i> Export Excel
+                    </a>
+                    <a href="/export/pdf">
+                        <i class="fas fa-file-pdf" style="color: var(--danger);"></i> Export PDF
+                    </a>
+                </div>
+            </div>
+            <button class="mms-btn mms-btn-danger mms-btn-sm" onclick="showResetAllModal()">
+                <i class="fas fa-redo"></i> Reset Semua
+            </button>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
+        <div class="mms-stat-card stat-total">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">Total Terdaftar</div>
+        </div>
+        <div class="mms-stat-card stat-hadir">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">{{ terpakai }}</div>
+            <div class="stat-label">Sudah Hadir</div>
+        </div>
+        <div class="mms-stat-card stat-belum">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-value">{{ sisa }}</div>
+            <div class="stat-label">Belum Hadir</div>
+        </div>
+        <div class="mms-stat-card stat-kuota">
+            <div class="stat-icon">🎟️</div>
+            <div class="stat-value">{{ kuota - total }}</div>
+            <div class="stat-label">Sisa Kuota</div>
+        </div>
+    </div>
+
+    <!-- Quota Management -->
+    <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
+        <h4 style="margin-bottom: 1rem;"><i class="fas fa-sliders-h" style="color: var(--accent-gold);"></i> Pengaturan Kuota Pendaftaran</h4>
+        <form method="POST" action="/admin/kuota" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-10)" style="padding: 0.4rem 0.75rem; min-width: 40px;">-10</button>
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-1)" style="padding: 0.4rem 0.75rem; min-width: 40px;">-1</button>
+                <input type="number" name="kuota" id="kuotaInput" value="{{ kuota }}" min="1" class="mms-input" style="width: 90px; text-align: center; font-weight: 700; font-size: 1.1rem; padding: 0.5rem;">
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(1)" style="padding: 0.4rem 0.75rem; min-width: 40px;">+1</button>
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(10)" style="padding: 0.4rem 0.75rem; min-width: 40px;">+10</button>
+            </div>
+            <button type="submit" class="mms-btn mms-btn-primary mms-btn-sm">
+                <i class="fas fa-save"></i> Simpan
+            </button>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Kuota saat ini: <strong>{{ kuota }}</strong> (terisi {{ total }})</span>
+        </form>
+    </div>
+
+    <!-- Charts -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
+        <div class="mms-chart-card">
+            <h4><i class="fas fa-chart-pie" style="color: var(--primary-light);"></i> Kehadiran</h4>
+            <div style="position: relative; max-width: 250px; margin: 0 auto;">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+        <div class="mms-chart-card">
+            <h4><i class="fas fa-chart-bar" style="color: var(--primary-light);"></i> Per Angkatan</h4>
+            <canvas id="angkatanChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Timeline Chart -->
+    <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
+        <h4><i class="fas fa-chart-line" style="color: var(--primary-light);"></i> Timeline Scan (Per Jam)</h4>
+        <canvas id="timelineChart" style="max-height: 250px;"></canvas>
+    </div>
+
+    <!-- Table Section -->
+    <div class="animate-fade-in-up">
+        <!-- Search & Filter -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div class="mms-tabs" id="statusTabs">
+                <button class="mms-tab active" data-filter="semua" onclick="filterTable('semua', this)">
+                    Semua <span style="font-size: 0.75rem; opacity: 0.7;">({{ total }})</span>
+                </button>
+                <button class="mms-tab" data-filter="hadir" onclick="filterTable('hadir', this)">
+                    ✅ Hadir <span style="font-size: 0.75rem; opacity: 0.7;">({{ terpakai }})</span>
+                </button>
+                <button class="mms-tab" data-filter="belum" onclick="filterTable('belum', this)">
+                    ⏳ Belum <span style="font-size: 0.75rem; opacity: 0.7;">({{ sisa }})</span>
+                </button>
+            </div>
+            <div class="mms-search-wrapper" style="flex: 1; max-width: 300px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="mms-input" id="searchInput" placeholder="Cari nama, kode, angkatan..." oninput="searchTable()" style="padding-left: 2.75rem;">
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="mms-table-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table class="mms-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Angkatan</th>
+                        <th>Kode</th>
+                        <th>Status</th>
+                        <th>Waktu Daftar</th>
+                        <th>Waktu Scan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for t in tiket %}
+                    <tr data-status="{% if t.is_used %}hadir{% else %}belum{% endif %}"
+                        data-nama="{{ t.nama|lower }}"
+                        data-angkatan="{{ t.angkatan|lower }}"
+                        data-kode="{{ t.kode|lower }}">
+                        <td>{{ loop.index }}</td>
+                        <td style="font-weight: 500;">{{ t.nama }}</td>
+                        <td>
+                            <span class="mms-badge mms-badge-info">{{ t.angkatan }}</span>
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <code style="font-weight: 600; color: var(--primary-dark); background: var(--bg-soft-pink); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.82rem; white-space: nowrap;">{{ t.kode }}</code>
+                        </td>
+                        <td>
+                            {% if t.is_used %}
+                            <span class="mms-badge mms-badge-success">
+                                <i class="fas fa-check-circle"></i> Hadir
+                            </span>
+                            {% else %}
+                            <span class="mms-badge mms-badge-warning">
+                                <i class="fas fa-clock"></i> Belum
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">
+                            {{ t.waktu_daftar.strftime('%d/%m/%Y %H:%M') if t.waktu_daftar else '-' }}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">
+                            {{ t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-' }}
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                {% if t.is_used %}
+                                <form method="POST" action="/reset_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-reset" title="Reset tiket" onclick="return confirm('Reset tiket {{ t.kode }}?')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <form method="POST" action="/hapus_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-delete" title="Hapus tiket" onclick="return confirm('Hapus tiket {{ t.kode }}? Data tidak bisa dikembalikan!')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if not tiket %}
+        <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+            <p>Belum ada data tiket terdaftar.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Reset All Modal -->
+<div class="mms-modal-overlay" id="resetAllModal">
+    <div class="mms-modal">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">⚠️</div>
+        <h3>Reset Semua Tiket?</h3>
+        <p>Semua status kehadiran akan direset menjadi "Belum Hadir". Data peserta tetap aman.</p>
+        <div class="modal-actions">
+            <button class="mms-btn mms-btn-outline" onclick="hideResetAllModal()">Batal</button>
+            <form method="POST" action="/reset_semua" style="display: inline;">
+                <button type="submit" class="mms-btn mms-btn-danger">
+                    <i class="fas fa-redo"></i> Ya, Reset
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // ==========================
+    // Export Dropdown
+    // ==========================
+    function toggleExportMenu() {
+        document.getElementById('exportMenu').classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.export-dropdown')) {
+            document.getElementById('exportMenu').classList.remove('show');
+        }
+    });
+
+    // ==========================
+    // Kuota +/- Buttons
+    // ==========================
+    function changeKuota(delta) {
+        const input = document.getElementById('kuotaInput');
+        let val = parseInt(input.value) || 1;
+        val = Math.max(1, val + delta);
+        input.value = val;
+    }
+
+    // ==========================
+    // Modal
+    // ==========================
+    function showResetAllModal() {
+        document.getElementById('resetAllModal').classList.add('show');
+    }
+
+    function hideResetAllModal() {
+        document.getElementById('resetAllModal').classList.remove('show');
+    }
+
+    // ==========================
+    // Table Filter & Search
+    // ==========================
+    let currentFilter = 'semua';
+
+    function filterTable(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.mms-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    function searchTable() {
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#tableBody tr');
+
+        rows.forEach(row => {
+            const status = row.dataset.status;
+            const nama = row.dataset.nama;
+            const angkatan = row.dataset.angkatan;
+            const kode = row.dataset.kode;
+
+            const matchesFilter = currentFilter === 'semua' || status === currentFilter;
+            const matchesSearch = !searchTerm ||
+                nama.includes(searchTerm) ||
+                angkatan.includes(searchTerm) ||
+                kode.includes(searchTerm);
+
+            row.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
+        });
+    }
+
+    // ==========================
+    // Charts (load via API)
+    // ==========================
+    fetch('/api/stats')
+        .then(res => res.json())
+        .then(data => {
+            // Attendance Pie Chart
+            new Chart(document.getElementById('attendanceChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir', 'Belum Hadir'],
+                    datasets: [{
+                        data: [data.hadir, data.belum_hadir],
+                        backgroundColor: ['#5DAE78', '#E5A63B'],
+                        borderWidth: 0,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 16,
+                                usePointStyle: true,
+                                font: { family: 'Poppins', size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Per Angkatan Bar Chart
+            const angkatanLabels = Object.keys(data.angkatan);
+            const angkatanTotal = angkatanLabels.map(k => data.angkatan[k].total);
+            const angkatanHadir = angkatanLabels.map(k => data.angkatan[k].hadir);
+
+            new Chart(document.getElementById('angkatanChart'), {
+                type: 'bar',
+                data: {
+                    labels: angkatanLabels,
+                    datasets: [
+                        {
+                            label: 'Total',
+                            data: angkatanTotal,
+                            backgroundColor: 'rgba(107, 76, 122, 0.7)',
+                            borderRadius: 8,
+                            borderSkipped: false
+                        },
+                        {
+                            label: 'Hadir',
+                            data: angkatanHadir,
+                            backgroundColor: 'rgba(93, 174, 120, 0.7)',
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, font: { family: 'Inter', size: 11 } },
+                            grid: { color: 'rgba(107,76,122,0.06)' }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Poppins', size: 11 } },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                usePointStyle: true,
+                                font: { family: 'Poppins', size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Timeline Line Chart
+            const timeLabels = Object.keys(data.timeline);
+            const timeValues = Object.values(data.timeline);
+
+            new Chart(document.getElementById('timelineChart'), {
+                type: 'line',
+                data: {
+                    labels: timeLabels.length ? timeLabels : ['Belum ada data'],
+                    datasets: [{
+                        label: 'Jumlah Scan',
+                        data: timeValues.length ? timeValues : [0],
+                        borderColor: '#D4A843',
+                        backgroundColor: 'rgba(212, 168, 67, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#D4A843',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, font: { family: 'Inter', size: 11 } },
+                            grid: { color: 'rgba(107,76,122,0.06)' }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Inter', size: 11 } },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                usePointStyle: true,
+                                font: { family: 'Poppins', size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+</script>
+{% endblock %}
