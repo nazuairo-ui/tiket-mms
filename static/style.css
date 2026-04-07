@@ -9,7 +9,7 @@
     --accent-gold: #D4A843;
     --accent-gold-light: #F0DCA0;
     --bg-cream: #FFFFFF;
-    --bg-soft-pink: #FDF0F7;
+    --bg-soft-pink: #FFFFFF;
     --bg-card: rgba(255, 255, 255, 0.85);
     --text-dark: #2D1B36;
     --text-body: #4A3654;
@@ -896,7 +896,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, #8B6B9F 100%);
+    background: #FFFFFF;
     padding: 1rem;
 }
 
@@ -959,7 +959,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    background: var(--bg-soft-pink);
+    background: #FFFFFF;
 }
 
 /* ===== Kuota Bar ===== */
