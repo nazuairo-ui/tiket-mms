@@ -5,7 +5,8 @@
 {% block content %}
 <div class="fullpage-center">
     <div style="max-width: 450px; width: 100%;">
-        <div class="mms-card" style="text-align: center; border-top: 5px solid var(--success); position: relative; overflow: hidden;">
+        <div class="mms-card"
+            style="text-align: center; border-top: 5px solid var(--success); position: relative; overflow: hidden;">
 
             <!-- Success Icon -->
             <div style="font-size: 3rem; margin-bottom: 0.5rem;" class="animate-scale-in">🎉</div>
@@ -21,7 +22,8 @@
             </div>
 
             <!-- Ticket Info -->
-            <div style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
+            <div
+                style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
                     <div>
                         <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Nama</div>
@@ -34,7 +36,9 @@
                 </div>
                 <div style="margin-top: 0.75rem; text-align: center;">
                     <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">Kode Tiket</div>
-                    <div style="font-family: 'Poppins', monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">{{ kode }}</div>
+                    <div
+                        style="font-family: 'Poppins', monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">
+                        {{ kode }}</div>
                 </div>
             </div>
 
@@ -45,16 +49,16 @@
             </div>
 
             <!-- Action Buttons -->
-            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+            <!-- <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
                 <a href="/form" class="mms-btn mms-btn-gold mms-btn-lg" style="width: 100%; justify-content: center;">
                     <i class="fas fa-clipboard-list"></i> Isi Data Diri (WAJIB)
-                </a>
-                <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-plus"></i> Daftarkan Lagi
-                </a>
-            </div>
+                </a> -->
+            <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
+                <i class="fas fa-plus"></i> Daftarkan Lagi
+            </a>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Confetti -->
