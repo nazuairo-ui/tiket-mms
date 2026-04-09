@@ -16,49 +16,57 @@
                 Ahlan <strong style="color: var(--text-dark);">{{ nama }}</strong>, ini tiket anti 🫶
             </p>
 
-            <!-- QR Code -->
-            <div class="qr-wrapper" style="margin-bottom: 1.25rem;">
-                <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="180" height="180">
-            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+                <a href="/form" class="mms-btn mms-btn-danger mms-btn-lg" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-clipboard-list"></i> WAJIB ISI DATA DIRI
+                </a>
 
-            <!-- Ticket Info -->
-            <div
-                style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Nama</div>
-                        <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ nama }}</div>
+                <!-- QR Code -->
+                <div class="qr-wrapper" style="margin-bottom: 1.25rem;">
+                    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="180" height="180">
+                </div>
+
+                <!-- Ticket Info -->
+                <div
+                    style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                        <div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Nama</div>
+                            <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ nama }}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Angkatan
+                            </div>
+                            <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ angkatan }}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Angkatan</div>
-                        <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ angkatan }}</div>
+                    <div style="margin-top: 0.75rem; text-align: center;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">Kode Tiket
+                        </div>
+                        <div
+                            style="font-family: 'Poppins', monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">
+                            {{ kode }}</div>
                     </div>
                 </div>
-                <div style="margin-top: 0.75rem; text-align: center;">
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">Kode Tiket</div>
-                    <div
-                        style="font-family: 'Poppins', monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">
-                        {{ kode }}</div>
+
+                <!-- Instructions -->
+                <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
+                    <i class="fas fa-camera"></i>
+                    <span>Silakan <strong>screenshot</strong> halaman ini dan tunjukkan ke panitia saat masuk.</span>
                 </div>
-            </div>
 
-            <!-- Instructions -->
-            <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
-                <i class="fas fa-camera"></i>
-                <span>Silakan <strong>screenshot</strong> halaman ini dan tunjukkan ke panitia saat masuk.</span>
-            </div>
-
-            <!-- Action Buttons -->
-            <!-- <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+                <!-- Action Buttons -->
+                <!-- <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
                 <a href="/form" class="mms-btn mms-btn-gold mms-btn-lg" style="width: 100%; justify-content: center;">
                     <i class="fas fa-clipboard-list"></i> Isi Data Diri (WAJIB)
                 </a> -->
-            <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
-                <i class="fas fa-plus"></i> Daftarkan Lagi
-            </a>
+                <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-plus"></i> Daftarkan Lagi
+                </a>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 <!-- Confetti -->
