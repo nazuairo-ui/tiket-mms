@@ -13,7 +13,8 @@ import qrcode
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'tiket.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+    os.path.join(basedir, 'tiket.db')
 app.config['SECRET_KEY'] = 'mms-kajian-secret-key-2026'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -145,6 +146,11 @@ def cek_manual():
     if kode:
         return redirect(url_for('scan', kode_tiket=kode))
     return redirect(url_for('home'))
+
+
+@app.route('/depan')
+def halaman_depan():
+    return render_template('depan.html')
 
 
 @app.route('/daftar')
@@ -291,12 +297,14 @@ def export_csv():
     tikets = Tiket.query.order_by(Tiket.waktu_daftar.desc()).all()
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(['No', 'Nama', 'Angkatan', 'Kode Tiket', 'Status', 'Waktu Daftar', 'Waktu Scan'])
+    writer.writerow(['No', 'Nama', 'Angkatan', 'Kode Tiket',
+                    'Status', 'Waktu Daftar', 'Waktu Scan'])
     for i, t in enumerate(tikets, 1):
         writer.writerow([
             i, t.nama, t.angkatan, t.kode,
             'Hadir' if t.is_used else 'Belum Hadir',
-            t.waktu_daftar.strftime('%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
+            t.waktu_daftar.strftime(
+                '%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
             t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-'
         ])
     output.seek(0)
@@ -320,14 +328,16 @@ def export_excel():
 
     # Header styling
     header_font = Font(bold=True, color="FFFFFF", size=11)
-    header_fill = PatternFill(start_color="6B4C7A", end_color="6B4C7A", fill_type="solid")
+    header_fill = PatternFill(start_color="6B4C7A",
+                              end_color="6B4C7A", fill_type="solid")
     header_align = Alignment(horizontal="center", vertical="center")
     thin_border = Border(
         left=Side(style='thin'), right=Side(style='thin'),
         top=Side(style='thin'), bottom=Side(style='thin')
     )
 
-    headers = ['No', 'Nama', 'Angkatan', 'Kode Tiket', 'Status', 'Waktu Daftar', 'Waktu Scan']
+    headers = ['No', 'Nama', 'Angkatan', 'Kode Tiket',
+               'Status', 'Waktu Daftar', 'Waktu Scan']
     for col, header in enumerate(headers, 1):
         cell = ws.cell(row=1, column=col, value=header)
         cell.font = header_font
@@ -342,20 +352,26 @@ def export_excel():
         ws.cell(row=row, column=2, value=t.nama).border = thin_border
         ws.cell(row=row, column=3, value=t.angkatan).border = thin_border
         ws.cell(row=row, column=4, value=t.kode).border = thin_border
-        ws.cell(row=row, column=5, value='Hadir' if t.is_used else 'Belum Hadir').border = thin_border
-        ws.cell(row=row, column=6, value=t.waktu_daftar.strftime('%d/%m/%Y %H:%M') if t.waktu_daftar else '-').border = thin_border
-        ws.cell(row=row, column=7, value=t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-').border = thin_border
+        ws.cell(row=row, column=5,
+                value='Hadir' if t.is_used else 'Belum Hadir').border = thin_border
+        ws.cell(row=row, column=6, value=t.waktu_daftar.strftime(
+            '%d/%m/%Y %H:%M') if t.waktu_daftar else '-').border = thin_border
+        ws.cell(row=row, column=7, value=t.waktu_scan.strftime(
+            '%d/%m/%Y %H:%M') if t.waktu_scan else '-').border = thin_border
 
         # Color status
         status_cell = ws.cell(row=row, column=5)
         if t.is_used:
-            status_cell.fill = PatternFill(start_color="D4EDDA", end_color="D4EDDA", fill_type="solid")
+            status_cell.fill = PatternFill(
+                start_color="D4EDDA", end_color="D4EDDA", fill_type="solid")
         else:
-            status_cell.fill = PatternFill(start_color="FFF3CD", end_color="FFF3CD", fill_type="solid")
+            status_cell.fill = PatternFill(
+                start_color="FFF3CD", end_color="FFF3CD", fill_type="solid")
 
     # Auto-width columns
     for col in range(1, 8):
-        max_len = max(len(str(ws.cell(row=r, column=col).value or '')) for r in range(1, len(tikets) + 2))
+        max_len = max(len(str(ws.cell(row=r, column=col).value or ''))
+                      for r in range(1, len(tikets) + 2))
         ws.column_dimensions[chr(64 + col)].width = max(max_len + 4, 12)
 
     output = io.BytesIO()
@@ -380,7 +396,8 @@ def export_pdf():
     from reportlab.lib.units import mm
 
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4), topMargin=20*mm, bottomMargin=20*mm)
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(
+        A4), topMargin=20*mm, bottomMargin=20*mm)
     elements = []
     styles = getSampleStyleSheet()
 
@@ -391,12 +408,14 @@ def export_pdf():
 
     # Table data
     tikets = Tiket.query.order_by(Tiket.waktu_daftar.desc()).all()
-    data = [['No', 'Nama', 'Angkatan', 'Kode Tiket', 'Status', 'Waktu Daftar', 'Waktu Scan']]
+    data = [['No', 'Nama', 'Angkatan', 'Kode Tiket',
+             'Status', 'Waktu Daftar', 'Waktu Scan']]
     for i, t in enumerate(tikets, 1):
         data.append([
             str(i), t.nama, t.angkatan, t.kode,
             'Hadir' if t.is_used else 'Belum Hadir',
-            t.waktu_daftar.strftime('%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
+            t.waktu_daftar.strftime(
+                '%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
             t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-'
         ])
 
@@ -411,7 +430,8 @@ def export_pdf():
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
         ('FONTSIZE', (0, 1), (-1, -1), 9),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#F9F0F7')]),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1),
+         [colors.white, colors.HexColor('#F9F0F7')]),
     ]))
     elements.append(table)
 
