@@ -216,9 +216,13 @@ def form_data_diri():
     return render_template('form.html')
 
 
+@app.route('/whatsapp')
+def redirect_whatsapp():
+    return render_template('whatsapp.html')
 # ========================
 # ADMIN ROUTES (Protected)
 # ========================
+
 
 @app.route('/admin')
 @login_required
