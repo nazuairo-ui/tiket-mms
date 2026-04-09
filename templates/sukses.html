@@ -16,11 +16,10 @@
                 Ahlan <strong style="color: var(--text-dark);">{{ nama }}</strong>, ini tiket anti 🫶
             </p>
 
-
-
             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                <a href="/form" class="mms-btn mms-btn-danger mms-btn-lg" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-clipboard-list"></i> WAJIB ISI DATA DIRI (KLIK DISINI)
+                <a href="/whatsapp" class="mms-btn mms-btn-primary mms-btn-lg"
+                    style="width: 100%; justify-content: center;">
+                    <i class="fas fa-clipboard-list"></i> GROUP WHATSAPP (KLIK DISINI)
                 </a>
 
                 <!-- QR Code -->
@@ -52,54 +51,50 @@
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                    <a href="/form" class="mms-btn mms-btn-primary mms-btn-lg"
-                        style="width: 100%; justify-content: center;">
-                        <i class="fas fa-clipboard-list"></i> GROUP WHATSAPP (KLIK DISINI)
 
-                        <!-- Instructions -->
-                        <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
-                            <i class="fas fa-camera"></i>
-                            <span>Silahkan <strong>screenshot</strong> halaman ini dan tunjukkan ke panitia saat
-                                masuk.</span>
-                        </div>
-
-
-                        <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
-                            <i class="fas fa-plus"></i> Daftarkan Lagi
-                        </a>
+                <!-- Instructions -->
+                <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
+                    <i class="fas fa-camera"></i>
+                    <span>Silahkan <strong>screenshot</strong> halaman ini dan tunjukkan ke panitia saat
+                        masuk.</span>
                 </div>
+
+
+                <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-plus"></i> Daftarkan Lagi
+                </a>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Confetti -->
-    <div class="confetti-container" id="confettiContainer"></div>
-    {% endblock %}
+<!-- Confetti -->
+<div class="confetti-container" id="confettiContainer"></div>
+{% endblock %}
 
-    {% block scripts %}
-    <script>
-        // Create confetti
-        const container = document.getElementById('confettiContainer');
-        const colors = ['#6B4C7A', '#D4A843', '#F2DAE8', '#5DAE78', '#E5A63B', '#9B7FAA'];
+{% block scripts %}
+<script>
+    // Create confetti
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#6B4C7A', '#D4A843', '#F2DAE8', '#5DAE78', '#E5A63B', '#9B7FAA'];
 
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            const shapes = ['50%', '0'];
-            confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
-            confetti.style.width = (Math.random() * 8 + 5) + 'px';
-            confetti.style.height = (Math.random() * 8 + 5) + 'px';
-            container.appendChild(confetti);
-        }
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        const shapes = ['50%', '0'];
+        confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+        confetti.style.width = (Math.random() * 8 + 5) + 'px';
+        confetti.style.height = (Math.random() * 8 + 5) + 'px';
+        container.appendChild(confetti);
+    }
 
-        // Remove confetti after animation
-        setTimeout(() => {
-            container.style.display = 'none';
-        }, 6000);
-    </script>
-    {% endblock %}
+    // Remove confetti after animation
+    setTimeout(() => {
+        container.style.display = 'none';
+    }, 6000);
+</script>
+{% endblock %}
