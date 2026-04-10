@@ -148,9 +148,9 @@ def cek_manual():
     return redirect(url_for('home'))
 
 
-@app.route('/depan')
+@app.route('/pendaftaran')
 def halaman_depan():
-    return render_template('depan.html')
+    return render_template('pendaftaran.html')
 
 
 @app.route('/daftar')
