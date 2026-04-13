@@ -9,14 +9,14 @@
 {% block content %}
 <div class="container" style="padding: 2rem 1rem; max-width: 1200px; margin: 0 auto;">
 
-    <!-- Page Header -->
     <div class="page-header animate-fade-in-up" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 10;">
         <div>
-            <h1><i class="fas fa-chart-pie" style="color: var(--accent-gold);"></i> Dashboard Admin</h1>
+            <h1><i class="fas fa-chart-pie" style="color: var(--accent-gold);"></i> Dashboard Admin
+                <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+            </h1>
             <p>Rekap data tiket kajian offline MMS 2026</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <!-- Export Dropdown -->
             <div class="export-dropdown">
                 <button class="mms-btn mms-btn-gold" id="exportBtn" onclick="toggleExportMenu()">
                     <i class="fas fa-download"></i> Export
@@ -39,31 +39,29 @@
         </div>
     </div>
 
-    <!-- Stat Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
         <div class="mms-stat-card stat-total">
             <div class="stat-icon">👥</div>
-            <div class="stat-value">{{ total }}</div>
+            <div class="stat-value" id="liveTotal">{{ total }}</div>
             <div class="stat-label">Total Terdaftar</div>
         </div>
         <div class="mms-stat-card stat-hadir">
             <div class="stat-icon">✅</div>
-            <div class="stat-value">{{ terpakai }}</div>
+            <div class="stat-value" id="liveHadir">{{ terpakai }}</div>
             <div class="stat-label">Sudah Hadir</div>
         </div>
         <div class="mms-stat-card stat-belum">
             <div class="stat-icon">⏳</div>
-            <div class="stat-value">{{ sisa }}</div>
+            <div class="stat-value" id="liveBelum">{{ sisa }}</div>
             <div class="stat-label">Belum Hadir</div>
         </div>
         <div class="mms-stat-card stat-kuota">
             <div class="stat-icon">🎟️</div>
-            <div class="stat-value">{{ kuota - total }}</div>
+            <div class="stat-value" id="liveSisaKuota">{{ kuota - total }}</div>
             <div class="stat-label">Sisa Kuota</div>
         </div>
     </div>
 
-    <!-- Quota Management -->
     <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
         <h4 style="margin-bottom: 1rem;"><i class="fas fa-sliders-h" style="color: var(--accent-gold);"></i> Pengaturan Kuota Pendaftaran</h4>
         <form method="POST" action="/admin/kuota" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
@@ -81,7 +79,38 @@
         </form>
     </div>
 
-    <!-- Charts -->
+    <div class="mms-chart-card animate-fade-in-up walkin-card" style="margin-bottom: 2rem;">
+        <h4 style="margin-bottom: 1rem;">
+            <i class="fas fa-user-plus" style="color: var(--success);"></i> Registrasi Walk-in
+        </h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">Daftarkan peserta langsung di hari H.</p>
+        <form method="POST" action="/admin/walkin" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+            <div style="flex: 2; min-width: 160px;">
+                <label class="mms-label"><i class="fas fa-user" style="color: var(--primary-light);"></i> Nama Lengkap</label>
+                <input type="text" name="nama" class="mms-input" placeholder="Nama peserta" required>
+            </div>
+            <div style="flex: 1; min-width: 130px;">
+                <label class="mms-label"><i class="fas fa-users" style="color: var(--primary-light);"></i> Angkatan</label>
+                <select name="angkatan" class="mms-select" required>
+                    <option value="" selected disabled>— Pilih —</option>
+                    <option value="MMS 1">MMS 1</option>
+                    <option value="MMS 2">MMS 2</option>
+                    <option value="MMS 3">MMS 3</option>
+                    <option value="MMS 4">MMS 4</option>
+                    <option value="MMS 5">MMS 5</option>
+                    <option value="MMS 6">MMS 6</option>
+                    <option value="Pengurus">Pengurus</option>
+                    <option value="Tamu">Tamu</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="mms-btn mms-btn-success mms-btn-sm" onclick="return confirm('Daftarkan peserta walk-in ini?')">
+                    <i class="fas fa-user-plus"></i> Daftarkan
+                </button>
+            </div>
+        </form>
+    </div>
+
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
         <div class="mms-chart-card">
             <h4><i class="fas fa-chart-pie" style="color: var(--primary-light);"></i> Kehadiran</h4>
@@ -95,15 +124,12 @@
         </div>
     </div>
 
-    <!-- Timeline Chart -->
     <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
         <h4><i class="fas fa-chart-line" style="color: var(--primary-light);"></i> Timeline Scan (Per Jam)</h4>
         <canvas id="timelineChart" style="max-height: 250px;"></canvas>
     </div>
 
-    <!-- Table Section -->
     <div class="animate-fade-in-up">
-        <!-- Search & Filter -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
             <div class="mms-tabs" id="statusTabs">
                 <button class="mms-tab active" data-filter="semua" onclick="filterTable('semua', this)">
@@ -122,7 +148,6 @@
             </div>
         </div>
 
-        <!-- Data Table -->
         <div class="mms-table-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
             <table class="mms-table" id="dataTable">
                 <thead>
@@ -163,10 +188,10 @@
                             {% endif %}
                         </td>
                         <td style="font-size: 0.82rem; color: var(--text-muted);">
-                            {{ t.waktu_daftar.strftime('%d/%m/%Y %H:%M') if t.waktu_daftar else '-' }}
+                            {{ t.waktu_daftar|wib }}
                         </td>
                         <td style="font-size: 0.82rem; color: var(--text-muted);">
-                            {{ t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-' }}
+                            {{ t.waktu_scan|wib }}
                         </td>
                         <td>
                             <div class="action-btns">
@@ -199,7 +224,6 @@
     </div>
 </div>
 
-<!-- Reset All Modal -->
 <div class="mms-modal-overlay" id="resetAllModal">
     <div class="mms-modal">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">⚠️</div>
@@ -219,9 +243,6 @@
 
 {% block scripts %}
 <script>
-    // ==========================
-    // Export Dropdown
-    // ==========================
     function toggleExportMenu() {
         document.getElementById('exportMenu').classList.toggle('show');
     }
@@ -232,9 +253,6 @@
         }
     });
 
-    // ==========================
-    // Kuota +/- Buttons
-    // ==========================
     function changeKuota(delta) {
         const input = document.getElementById('kuotaInput');
         let val = parseInt(input.value) || 1;
@@ -242,9 +260,6 @@
         input.value = val;
     }
 
-    // ==========================
-    // Modal
-    // ==========================
     function showResetAllModal() {
         document.getElementById('resetAllModal').classList.add('show');
     }
@@ -253,9 +268,6 @@
         document.getElementById('resetAllModal').classList.remove('show');
     }
 
-    // ==========================
-    // Table Filter & Search
-    // ==========================
     let currentFilter = 'semua';
 
     function filterTable(filter, btn) {
@@ -289,13 +301,9 @@
         });
     }
 
-    // ==========================
-    // Charts (load via API)
-    // ==========================
     fetch('/api/stats')
         .then(res => res.json())
         .then(data => {
-            // Attendance Pie Chart
             new Chart(document.getElementById('attendanceChart'), {
                 type: 'doughnut',
                 data: {
@@ -323,7 +331,6 @@
                 }
             });
 
-            // Per Angkatan Bar Chart
             const angkatanLabels = Object.keys(data.angkatan);
             const angkatanTotal = angkatanLabels.map(k => data.angkatan[k].total);
             const angkatanHadir = angkatanLabels.map(k => data.angkatan[k].hadir);
@@ -373,7 +380,6 @@
                 }
             });
 
-            // Timeline Line Chart
             const timeLabels = Object.keys(data.timeline);
             const timeValues = Object.values(data.timeline);
 
@@ -419,5 +425,153 @@
                 }
             });
         });
+
+    let attendanceChartInstance = null;
+    let angkatanChartInstance = null;
+    let timelineChartInstance = null;
+
+    setTimeout(() => {
+        attendanceChartInstance = Chart.getChart('attendanceChart');
+        angkatanChartInstance = Chart.getChart('angkatanChart');
+        timelineChartInstance = Chart.getChart('timelineChart');
+    }, 2000);
+
+    function updateLiveStats() {
+        fetch('/api/stats')
+            .then(res => res.json())
+            .then(data => {
+                animateValue('liveTotal', data.total);
+                animateValue('liveHadir', data.hadir);
+                animateValue('liveBelum', data.belum_hadir);
+                animateValue('liveSisaKuota', data.sisa_kuota);
+
+                const tabs = document.querySelectorAll('.mms-tab');
+                tabs.forEach(tab => {
+                    const filter = tab.dataset.filter;
+                    const span = tab.querySelector('span');
+                    if (span) {
+                        if (filter === 'semua') span.textContent = `(${data.total})`;
+                        else if (filter === 'hadir') span.textContent = `(${data.hadir})`;
+                        else if (filter === 'belum') span.textContent = `(${data.belum_hadir})`;
+                    }
+                });
+
+                if (attendanceChartInstance) {
+                    attendanceChartInstance.data.datasets[0].data = [data.hadir, data.belum_hadir];
+                    attendanceChartInstance.update('none');
+                }
+
+                if (angkatanChartInstance) {
+                    const labels = Object.keys(data.angkatan);
+                    const totals = labels.map(k => data.angkatan[k].total);
+                    const hadirs = labels.map(k => data.angkatan[k].hadir);
+                    angkatanChartInstance.data.labels = labels;
+                    angkatanChartInstance.data.datasets[0].data = totals;
+                    angkatanChartInstance.data.datasets[1].data = hadirs;
+                    angkatanChartInstance.update('none');
+                }
+
+                if (timelineChartInstance) {
+                    const tLabels = Object.keys(data.timeline);
+                    const tValues = Object.values(data.timeline);
+                    timelineChartInstance.data.labels = tLabels.length ? tLabels : ['Belum ada data'];
+                    timelineChartInstance.data.datasets[0].data = tValues.length ? tValues : [0];
+                    timelineChartInstance.update('none');
+                }
+
+                if (data.tikets) {
+                    rebuildTable(data.tikets);
+                }
+            })
+            .catch(err => console.warn('Live update error:', err));
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str || ''));
+        return div.innerHTML;
+    }
+
+    function rebuildTable(tikets) {
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) return;
+
+        const currentRowCount = tbody.querySelectorAll('tr').length;
+        if (currentRowCount === tikets.length) {
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach((row, i) => {
+                if (i < tikets.length) {
+                    const t = tikets[i];
+                    const statusCell = row.cells[4];
+                    if (t.is_used) {
+                        statusCell.innerHTML = '<span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>';
+                    } else {
+                        statusCell.innerHTML = '<span class="mms-badge mms-badge-warning"><i class="fas fa-clock"></i> Belum</span>';
+                    }
+                    row.dataset.status = t.is_used ? 'hadir' : 'belum';
+                    row.cells[5].textContent = t.waktu_daftar;
+                    row.cells[6].textContent = t.waktu_scan;
+                }
+            });
+            return;
+        }
+
+        let html = '';
+        tikets.forEach((t, i) => {
+            const status = t.is_used ? 'hadir' : 'belum';
+            const eName = escapeHtml(t.nama);
+            const eAng = escapeHtml(t.angkatan);
+            const eKode = escapeHtml(t.kode);
+            const statusBadge = t.is_used
+                ? '<span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>'
+                : '<span class="mms-badge mms-badge-warning"><i class="fas fa-clock"></i> Belum</span>';
+            const resetBtn = t.is_used
+                ? `<form method="POST" action="/reset_tiket/${t.id}" style="display: inline;">
+                     <button type="submit" class="action-btn action-btn-reset" title="Reset tiket" onclick="return confirm('Reset tiket ${eKode}?')">
+                       <i class="fas fa-undo"></i>
+                     </button>
+                   </form>`
+                : '';
+
+            html += `<tr data-status="${status}" data-nama="${eName.toLowerCase()}" data-angkatan="${eAng.toLowerCase()}" data-kode="${eKode.toLowerCase()}">
+                <td>${i + 1}</td>
+                <td style="font-weight: 500;">${eName}</td>
+                <td><span class="mms-badge mms-badge-info">${eAng}</span></td>
+                <td style="white-space: nowrap;">
+                    <code style="font-weight: 600; color: var(--primary-dark); background: var(--bg-soft-pink); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.82rem; white-space: nowrap;">${eKode}</code>
+                </td>
+                <td>${statusBadge}</td>
+                <td style="font-size: 0.82rem; color: var(--text-muted);">${escapeHtml(t.waktu_daftar)}</td>
+                <td style="font-size: 0.82rem; color: var(--text-muted);">${escapeHtml(t.waktu_scan)}</td>
+                <td>
+                    <div class="action-btns">
+                        ${resetBtn}
+                        <form method="POST" action="/hapus_tiket/${t.id}" style="display: inline;">
+                            <button type="submit" class="action-btn action-btn-delete" title="Hapus tiket" onclick="return confirm('Hapus tiket ${eKode}? Data tidak bisa dikembalikan!')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+
+        applyFilters();
+    }
+
+    function animateValue(elementId, newVal) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        const oldVal = parseInt(el.textContent) || 0;
+        if (oldVal !== newVal) {
+            el.textContent = newVal;
+            el.style.transform = 'scale(1.2)';
+            el.style.transition = 'transform 0.3s ease';
+            setTimeout(() => { el.style.transform = 'scale(1)'; }, 300);
+        }
+    }
+
+    setInterval(updateLiveStats, 5000);
 </script>
 {% endblock %}

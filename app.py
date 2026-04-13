@@ -1,14 +1,16 @@
-from flask import Flask, redirect, render_template, request, url_for, jsonify, send_file, flash
+from flask import Flask, redirect, render_template, request, url_for, jsonify, send_file, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import pytz
 import uuid
 import os
 import io
 import csv
 import base64
 import qrcode
+import re
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -19,17 +21,39 @@ app.config['SECRET_KEY'] = 'mms-kajian-secret-key-2026'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Flask-Login setup
+WIB = pytz.timezone('Asia/Jakarta')
+
+def wib_now():
+    return datetime.now(WIB)
+
+def format_wib(dt):
+    if dt is None:
+        return '-'
+    if dt.tzinfo is None:
+        dt = WIB.localize(dt)
+    else:
+        dt = dt.astimezone(WIB)
+    return dt.strftime('%d/%m/%Y %H:%M WIB')
+
+@app.template_filter('wib')
+def wib_filter(dt):
+    return format_wib(dt)
+
+
+def sanitize_input(text, max_length=100):
+    """Strip HTML tags and limit length to prevent XSS."""
+    if not text:
+        return ''
+    cleaned = re.sub(r'<[^>]+>', '', text)
+    cleaned = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', cleaned)
+    return cleaned.strip()[:max_length]
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Silakan login terlebih dahulu.'
 login_manager.login_message_category = 'warning'
 
-
-# ========================
-# MODELS
-# ========================
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +73,7 @@ class Tiket(db.Model):
     nama = db.Column(db.String(100), default="Peserta Kajian MMS")
     angkatan = db.Column(db.String(50))
     is_used = db.Column(db.Boolean, default=False)
-    waktu_daftar = db.Column(db.DateTime, default=datetime.utcnow)
+    waktu_daftar = db.Column(db.DateTime, default=wib_now)
     waktu_scan = db.Column(db.DateTime, nullable=True)
 
 
@@ -64,28 +88,18 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# ========================
-# HELPER
-# ========================
-
 def get_kuota():
-    """Get current registration quota from settings."""
     setting = Setting.query.filter_by(key='kuota').first()
     return int(setting.value) if setting else 70
 
 
 def generate_qr_base64(data):
-    """Generate QR code and return as base64 string."""
     img = qrcode.make(data)
     buffer = io.BytesIO()
     img.save(buffer, format='PNG')
     buffer.seek(0)
     return base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-
-# ========================
-# AUTH ROUTES
-# ========================
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -111,10 +125,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-# ========================
-# PUBLIC ROUTES
-# ========================
-
 @app.route('/')
 def home():
     if not current_user.is_authenticated:
@@ -133,7 +143,7 @@ def scan(kode_tiket):
                                nama_peserta=tiket.nama, angkatan_peserta=tiket.angkatan)
     else:
         tiket.is_used = True
-        tiket.waktu_scan = datetime.utcnow()
+        tiket.waktu_scan = wib_now()
         db.session.commit()
         return render_template('index.html', status='berhasil', kode=kode_tiket,
                                nama_peserta=tiket.nama, angkatan_peserta=tiket.angkatan)
@@ -170,8 +180,8 @@ def proses_daftar():
     if total_terdaftar >= kuota:
         return render_template('habis.html', kuota=kuota)
 
-    nama = request.form.get('nama_input', '').strip()
-    pilihan_kelas = request.form.get('kelas_input', '').strip()
+    nama = sanitize_input(request.form.get('nama_input', ''))
+    pilihan_kelas = sanitize_input(request.form.get('kelas_input', ''))
 
     if not nama or not pilihan_kelas:
         flash('Nama dan angkatan wajib diisi!', 'danger')
@@ -203,8 +213,8 @@ def cek_tiket():
                 'angkatan': tiket.angkatan,
                 'kode': tiket.kode,
                 'is_used': tiket.is_used,
-                'waktu_daftar': tiket.waktu_daftar.strftime('%d %b %Y, %H:%M') if tiket.waktu_daftar else '-',
-                'waktu_scan': tiket.waktu_scan.strftime('%d %b %Y, %H:%M') if tiket.waktu_scan else '-'
+                'waktu_daftar': format_wib(tiket.waktu_daftar),
+                'waktu_scan': format_wib(tiket.waktu_scan)
             }
         else:
             result = {'found': False}
@@ -219,10 +229,6 @@ def form_data_diri():
 @app.route('/whatsapp')
 def redirect_whatsapp():
     return render_template('whatsapp.html')
-
-# ========================
-# ADMIN ROUTES (Protected)
-# ========================
 
 
 @app.route('/admin')
@@ -261,6 +267,25 @@ def set_kuota():
     return redirect(url_for('admin'))
 
 
+@app.route('/admin/walkin', methods=['POST'])
+@login_required
+def walkin_register():
+    nama = sanitize_input(request.form.get('nama', ''))
+    angkatan = sanitize_input(request.form.get('angkatan', ''))
+
+    if not nama or not angkatan:
+        flash('Nama dan angkatan wajib diisi untuk walk-in!', 'danger')
+        return redirect(url_for('admin'))
+
+    kode = "WLK-" + str(uuid.uuid4()).upper()[:4]
+    now = wib_now()
+    peserta = Tiket(nama=nama, angkatan=angkatan, kode=kode, is_used=True, waktu_daftar=now, waktu_scan=now)
+    db.session.add(peserta)
+    db.session.commit()
+    flash(f'Walk-in berhasil! {nama} ({angkatan}) terdaftar dengan kode {kode}.', 'success')
+    return redirect(url_for('admin'))
+
+
 @app.route('/reset_semua', methods=['POST'])
 @login_required
 def reset_semua():
@@ -291,10 +316,6 @@ def hapus_tiket(tiket_id):
     flash(f'Tiket {kode} berhasil dihapus.', 'success')
     return redirect(url_for('admin'))
 
-
-# ========================
-# EXPORT ROUTES
-# ========================
 
 @app.route('/export/csv')
 @login_required
@@ -331,7 +352,6 @@ def export_excel():
     ws = wb.active
     ws.title = "Rekap Tiket MMS"
 
-    # Header styling
     header_font = Font(bold=True, color="FFFFFF", size=11)
     header_fill = PatternFill(start_color="6B4C7A",
                               end_color="6B4C7A", fill_type="solid")
@@ -364,7 +384,6 @@ def export_excel():
         ws.cell(row=row, column=7, value=t.waktu_scan.strftime(
             '%d/%m/%Y %H:%M') if t.waktu_scan else '-').border = thin_border
 
-        # Color status
         status_cell = ws.cell(row=row, column=5)
         if t.is_used:
             status_cell.fill = PatternFill(
@@ -373,7 +392,6 @@ def export_excel():
             status_cell.fill = PatternFill(
                 start_color="FFF3CD", end_color="FFF3CD", fill_type="solid")
 
-    # Auto-width columns
     for col in range(1, 8):
         max_len = max(len(str(ws.cell(row=r, column=col).value or ''))
                       for r in range(1, len(tikets) + 2))
@@ -406,12 +424,10 @@ def export_pdf():
     elements = []
     styles = getSampleStyleSheet()
 
-    # Title
     title = Paragraph("Rekap Tiket Kajian Offline MMS 2026", styles['Title'])
     elements.append(title)
     elements.append(Spacer(1, 10*mm))
 
-    # Table data
     tikets = Tiket.query.order_by(Tiket.waktu_daftar.desc()).all()
     data = [['No', 'Nama', 'Angkatan', 'Kode Tiket',
              'Status', 'Waktu Daftar', 'Waktu Scan']]
@@ -451,16 +467,12 @@ def export_pdf():
     )
 
 
-# ========================
-# API ROUTES (for charts)
-# ========================
-
 @app.route('/api/stats')
 @login_required
 def api_stats():
     tikets = Tiket.query.all()
+    kuota = get_kuota()
 
-    # Per angkatan
     angkatan_data = {}
     for t in tikets:
         ang = t.angkatan or 'Lainnya'
@@ -470,44 +482,54 @@ def api_stats():
         if t.is_used:
             angkatan_data[ang]['hadir'] += 1
 
-    # Timeline scan (per jam)
     timeline = {}
     for t in tikets:
         if t.waktu_scan:
             hour_key = t.waktu_scan.strftime('%H:%M')
             timeline[hour_key] = timeline.get(hour_key, 0) + 1
 
-    # Sort timeline
     sorted_timeline = dict(sorted(timeline.items()))
 
     total = len(tikets)
     hadir = sum(1 for t in tikets if t.is_used)
 
+    tikets_ordered = Tiket.query.order_by(Tiket.waktu_daftar.desc()).all()
+
     return jsonify({
         'total': total,
         'hadir': hadir,
         'belum_hadir': total - hadir,
+        'kuota': kuota,
+        'sisa_kuota': max(0, kuota - total),
         'angkatan': angkatan_data,
-        'timeline': sorted_timeline
+        'timeline': sorted_timeline,
+        'tikets': [{
+            'id': t.id,
+            'nama': t.nama,
+            'angkatan': t.angkatan,
+            'kode': t.kode,
+            'is_used': t.is_used,
+            'waktu_daftar': format_wib(t.waktu_daftar),
+            'waktu_scan': format_wib(t.waktu_scan)
+        } for t in tikets_ordered]
     })
 
 
-# ========================
-# INIT
-# ========================
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    return send_from_directory(os.path.join(basedir, 'images'), filename)
+
 
 with app.app_context():
     db.create_all()
 
-    # Create default admin if not exists
     if not User.query.first():
         admin_user = User(username='admin')
         admin_user.set_password('admin123')
         db.session.add(admin_user)
         db.session.commit()
-        print("✅ Default admin created (admin/admin123)")
+        print("[OK] Default admin created (admin/admin123)")
 
-    # Create default kuota setting if not exists
     if not Setting.query.filter_by(key='kuota').first():
         db.session.add(Setting(key='kuota', value='70'))
         db.session.commit()
