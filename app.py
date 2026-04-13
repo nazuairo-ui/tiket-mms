@@ -41,7 +41,6 @@ def wib_filter(dt):
 
 
 def sanitize_input(text, max_length=100):
-    """Strip HTML tags and limit length to prevent XSS."""
     if not text:
         return ''
     cleaned = re.sub(r'<[^>]+>', '', text)
