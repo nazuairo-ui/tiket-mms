@@ -183,12 +183,11 @@ a:hover {
     gap: 0.75rem;
 }
 
-.top-text,
-.bottom-text {
+.text-top,
+.text-bottom {
     display: block;
     width: 100%;
     text-align: left !important;
-    /* Memastikan teks tidak lari ke tengah */
     color: white;
 }
 
