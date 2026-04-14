@@ -31,7 +31,9 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -46,7 +48,12 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Poppins', sans-serif;
     color: var(--text-dark);
     font-weight: 600;
@@ -67,6 +74,7 @@ a:hover {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -74,8 +82,13 @@ a:hover {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes scaleIn {
@@ -83,6 +96,7 @@ a:hover {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -90,8 +104,15 @@ a:hover {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 @keyframes slideDown {
@@ -99,6 +120,7 @@ a:hover {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -106,13 +128,25 @@ a:hover {
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 @keyframes confetti-fall {
-    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
 }
 
 .animate-fade-in-up {
@@ -145,7 +179,7 @@ a:hover {
 .mms-navbar .navbar-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 0.75rem;
 }
 
@@ -793,11 +827,25 @@ a:hover {
     animation: confetti-fall 4s linear forwards;
 }
 
-.text-primary { color: var(--primary) !important; }
-.text-gold { color: var(--accent-gold) !important; }
-.text-muted { color: var(--text-muted) !important; }
-.bg-soft-pink { background: var(--bg-soft-pink) !important; }
-.bg-cream { background: var(--bg-cream) !important; }
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.text-gold {
+    color: var(--accent-gold) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.bg-soft-pink {
+    background: var(--bg-soft-pink) !important;
+}
+
+.bg-cream {
+    background: var(--bg-cream) !important;
+}
 
 .page-header {
     margin-bottom: 2rem;
@@ -1067,10 +1115,13 @@ a:hover {
 }
 
 @keyframes livePulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
         transform: scale(1);
     }
+
     50% {
         opacity: 0.4;
         transform: scale(0.8);
@@ -1093,7 +1144,7 @@ a:hover {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s ease;
 }
 
