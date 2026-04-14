@@ -42,10 +42,12 @@
                     </span>
                 </a>
             </div>
+            <div>
             <button class="navbar-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')"
                 aria-label="Menu">
                 <i class="fas fa-bars"></i>
             </button>
+            </div>
             <div class="nav-links">
                 <a href="/pendaftaran" class="nav-link {% if request.endpoint == 'halaman_depan' %}active{% endif %}">
                     <i class="fas fa-ticket"></i> Daftar
