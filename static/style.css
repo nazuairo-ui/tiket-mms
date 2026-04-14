@@ -183,12 +183,17 @@ a:hover {
     gap: 0.75rem;
 }
 
-.text-top,
-.text-bottom {
+.text-top {
+    font-size: 1.2rem;
     display: block;
-    width: 100%;
     text-align: left !important;
-    color: white;
+}
+
+.text-bottom {
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: block;
+    text-align: left !important;
 }
 
 .mms-navbar .navbar-brand {
@@ -197,7 +202,8 @@ a:hover {
     font-size: 1.1rem;
     color: white !important;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.5rem;
     min-width: 0;
     flex: 1;
