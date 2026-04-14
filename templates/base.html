@@ -30,45 +30,51 @@
     <nav class="mms-navbar">
         <div class="container">
             <div class="navbar-inner">
-                <a href="/" class="navbar-brand" style="text-decoration: none;">
-                    <span class="text-top">Kajian Offline </span>
-                    <span class="text-bottom">Madrasah Mar'ah Shalihah</span>
+                <a href="/" class="navbar-brand"
+                    style="text-decoration: none; display: flex !important; flex-direction: column !important; align-items: flex-start !important; line-height: 1.1;">
+                    <span class="text-top"
+                        style="display: block !important; font-weight: bold; color: white !important; text-align: left !important;">
+                        Kajian Offline
+                    </span>
+                    <span class="text-bottom"
+                        style="display: block !important; font-size: 0.85rem; color: white !important; text-align: left !important;">
+                        Madrasah Mar'ah Shalihah
+                    </span>
+                </a>
+            </div>
+            <button class="navbar-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')"
+                aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="/pendaftaran" class="nav-link {% if request.endpoint == 'halaman_depan' %}active{% endif %}">
+                    <i class="fas fa-ticket"></i> Daftar
                 </a>
 
-                <button class="navbar-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')"
-                    aria-label="Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="nav-links">
-                    <a href="/pendaftaran"
-                        class="nav-link {% if request.endpoint == 'halaman_depan' %}active{% endif %}">
-                        <i class="fas fa-ticket"></i> Daftar
-                    </a>
+                <a href="/daftar" class="nav-link {% if request.endpoint == 'halaman_daftar' %}active{% endif %}">
+                    <i class="fas fa-ticket"></i> Dapatkan Tiket
+                </a>
 
-                    <a href="/daftar" class="nav-link {% if request.endpoint == 'halaman_daftar' %}active{% endif %}">
-                        <i class="fas fa-ticket"></i> Dapatkan Tiket
-                    </a>
-
-                    <a href="/cek" class="nav-link {% if request.endpoint == 'cek_tiket' %}active{% endif %}">
-                        <i class="fas fa-search"></i> Cek Tiket
-                    </a>
-                    {% if current_user.is_authenticated %}
-                    <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
-                        <i class="fas fa-qrcode"></i> Scanner
-                    </a>
-                    <a href="/admin" class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}">
-                        <i class="fas fa-chart-pie"></i> Dashboard
-                    </a>
-                    <a href="/logout" class="nav-link">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                    {% else %}
-                    <a href="/login" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </a>
-                    {% endif %}
-                </div>
+                <a href="/cek" class="nav-link {% if request.endpoint == 'cek_tiket' %}active{% endif %}">
+                    <i class="fas fa-search"></i> Cek Tiket
+                </a>
+                {% if current_user.is_authenticated %}
+                <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                    <i class="fas fa-qrcode"></i> Scanner
+                </a>
+                <a href="/admin" class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="/logout" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                {% else %}
+                <a href="/login" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                {% endif %}
             </div>
+        </div>
         </div>
     </nav>
     {% endblock %}
