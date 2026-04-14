@@ -17,14 +17,12 @@
         <div class="divider"></div>
     </div>
 
-    <!-- Scanner -->
     <div class="mms-card" style="padding: 1rem; margin-bottom: 1.5rem; animation-delay: 0.1s;">
         <div class="scanner-container">
             <div id="reader"></div>
         </div>
     </div>
 
-    <!-- Scan Result -->
     {% if status %}
     <div class="scan-result {% if status == 'berhasil' %}success{% elif status == 'telah terpakai' %}warning{% else %}error{% endif %}" style="margin-bottom: 1.5rem;">
         {% if status == 'berhasil' %}
@@ -55,7 +53,6 @@
     </div>
     {% endif %}
 
-    <!-- Manual Input -->
     <div class="mms-card" style="animation-delay: 0.2s;">
         <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; text-align: center;">
             <i class="fas fa-keyboard" style="color: var(--primary-light);"></i> Input Manual
@@ -75,7 +72,6 @@
 {% block scripts %}
 <script>
     function onScanSuccess(decodedText, decodedResult) {
-        // If the QR contains a full URL, extract the ticket code
         if (decodedText.includes('/scan/')) {
             const parts = decodedText.split('/scan/');
             window.location.href = "/scan/" + parts[parts.length - 1];

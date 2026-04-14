@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-/* ===== CSS Variables ===== */
 :root {
     --primary: #811C70;
     --primary-dark: #6F2861;
@@ -32,7 +31,6 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== Reset & Base ===== */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -64,7 +62,6 @@ a:hover {
     color: var(--primary-dark);
 }
 
-/* ===== Animations ===== */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -130,7 +127,6 @@ a:hover {
     animation: scaleIn 0.4s ease-out forwards;
 }
 
-/* ===== Navbar ===== */
 .mms-navbar {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
     padding: 0.75rem 0;
@@ -255,7 +251,6 @@ a:hover {
     }
 }
 
-/* ===== Cards ===== */
 .mms-card {
     background: var(--bg-card);
     backdrop-filter: blur(10px);
@@ -281,7 +276,6 @@ a:hover {
     padding: 2rem;
 }
 
-/* ===== Stat Cards ===== */
 .mms-stat-card {
     position: relative;
     overflow: hidden;
@@ -350,7 +344,6 @@ a:hover {
     background: linear-gradient(135deg, var(--info) 0%, #3D7AB5 100%);
 }
 
-/* ===== Buttons ===== */
 .mms-btn {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -433,7 +426,6 @@ a:hover {
     font-size: 1rem;
 }
 
-/* ===== Badges ===== */
 .mms-badge {
     display: inline-flex;
     align-items: center;
@@ -465,7 +457,6 @@ a:hover {
     color: var(--info);
 }
 
-/* ===== Form Elements ===== */
 .mms-input {
     font-family: 'Inter', sans-serif;
     width: 100%;
@@ -520,7 +511,6 @@ a:hover {
     display: block;
 }
 
-/* ===== Table ===== */
 .mms-table-wrapper {
     background: white;
     border-radius: var(--radius-md);
@@ -563,7 +553,6 @@ a:hover {
     border-bottom: none;
 }
 
-/* ===== Alerts ===== */
 .mms-alert {
     padding: 1rem 1.25rem;
     border-radius: var(--radius-sm);
@@ -600,7 +589,6 @@ a:hover {
     border-left: 4px solid var(--info);
 }
 
-/* ===== Tabs ===== */
 .mms-tabs {
     display: flex;
     gap: 0.5rem;
@@ -635,7 +623,6 @@ a:hover {
     box-shadow: var(--shadow-sm);
 }
 
-/* ===== Search Bar ===== */
 .mms-search-wrapper {
     position: relative;
 }
@@ -653,7 +640,6 @@ a:hover {
     padding-left: 2.75rem;
 }
 
-/* ===== Charts ===== */
 .mms-chart-card {
     background: white;
     border-radius: var(--radius-md);
@@ -672,7 +658,6 @@ a:hover {
     color: var(--text-dark);
 }
 
-/* ===== Modal ===== */
 .mms-modal-overlay {
     position: fixed;
     top: 0;
@@ -718,7 +703,6 @@ a:hover {
     justify-content: center;
 }
 
-/* ===== Footer ===== */
 .mms-footer {
     text-align: center;
     padding: 1.5rem;
@@ -733,7 +717,6 @@ a:hover {
     display: inline-block;
 }
 
-/* ===== QR Section ===== */
 .qr-wrapper {
     background: white;
     padding: 1.25rem;
@@ -747,7 +730,6 @@ a:hover {
     border-radius: 8px;
 }
 
-/* ===== Scanner ===== */
 .scanner-container {
     background: white;
     border-radius: var(--radius-lg);
@@ -765,7 +747,6 @@ a:hover {
     border-radius: var(--radius-md);
 }
 
-/* ===== Status Result ===== */
 .scan-result {
     padding: 1.5rem;
     border-radius: var(--radius-md);
@@ -793,7 +774,6 @@ a:hover {
     border: 2px solid var(--danger);
 }
 
-/* ===== Confetti ===== */
 .confetti-container {
     position: fixed;
     top: 0;
@@ -813,7 +793,6 @@ a:hover {
     animation: confetti-fall 4s linear forwards;
 }
 
-/* ===== Utility ===== */
 .text-primary { color: var(--primary) !important; }
 .text-gold { color: var(--accent-gold) !important; }
 .text-muted { color: var(--text-muted) !important; }
@@ -842,7 +821,6 @@ a:hover {
     margin: 1rem auto;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .mms-card {
         padding: 1.25rem;
@@ -890,7 +868,6 @@ a:hover {
     }
 }
 
-/* ===== Login Page Special ===== */
 .login-wrapper {
     min-height: 100vh;
     display: flex;
@@ -925,7 +902,6 @@ a:hover {
     box-shadow: 0 4px 15px rgba(107, 76, 122, 0.3);
 }
 
-/* ===== Envelope Card (Register) ===== */
 .envelope-card {
     background: white;
     border-radius: var(--radius-xl);
@@ -952,7 +928,6 @@ a:hover {
     opacity: 0.5;
 }
 
-/* ===== Full Page Center Layout ===== */
 .fullpage-center {
     min-height: 100vh;
     display: flex;
@@ -962,7 +937,6 @@ a:hover {
     background: #FFFFFF;
 }
 
-/* ===== Kuota Bar ===== */
 .kuota-bar {
     background: rgba(107, 76, 122, 0.08);
     border-radius: 50px;
@@ -978,7 +952,6 @@ a:hover {
     transition: width 1s ease-out;
 }
 
-/* ===== Export Dropdown ===== */
 .export-dropdown {
     position: relative;
     display: inline-block;
@@ -1020,7 +993,6 @@ a:hover {
     color: var(--primary);
 }
 
-/* ===== Action Buttons Inline ===== */
 .action-btns {
     display: flex;
     gap: 0.35rem;
@@ -1051,4 +1023,80 @@ a:hover {
 .action-btn-delete {
     background: var(--danger-bg);
     color: var(--danger);
+}
+
+.navbar-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .navbar-logo {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--success);
+    background: var(--success-bg);
+    padding: 0.2rem 0.65rem;
+    border-radius: 50px;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+}
+
+.walkin-card {
+    border-left: 4px solid var(--success);
+}
+
+.download-ticket-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.download-ticket-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.download-ticket-btn:hover::after {
+    left: 100%;
 }

@@ -8,7 +8,6 @@
         <div class="mms-card"
             style="text-align: center; border-top: 5px solid var(--success); position: relative; overflow: hidden;">
 
-            <!-- Success Icon -->
             <div style="font-size: 3rem; margin-bottom: 0.5rem;" class="animate-scale-in">🎉</div>
 
             <h2 style="color: var(--success); font-size: 1.3rem; margin-bottom: 0.25rem;">Alhamdulillah, Berhasil!</h2>
@@ -23,42 +22,56 @@
                 </a>
 
                 <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
-                    <i class="fas fa-camera"></i>
-                    <span>Silahkan <strong>screenshot</strong> halaman ini dan tunjukkan ke panitia saat
-                        masuk.</span>
+                    <i class="fas fa-download"></i>
+                    <span><strong>Screenshot</strong> atau klik tombol <strong>Download Tiket</strong> di bawah untuk menyimpan tiket kamu.</span>
                 </div>
 
-                <!-- QR Code -->
-                <div class="qr-wrapper" style="margin-bottom: 1.25rem;">
-                    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="180" height="180">
-                </div>
+                <div id="tiket-card" style="background: white; border-radius: 20px; padding: 2rem 1.5rem; border: 2px solid #F2DAE8; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #6F2861, #D4A843, #80196D);"></div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="MMS Logo" style="width: 64px; height: 64px; object-fit: cover;">
+                    </div>
+                    
+                    <div style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; color: #6F2861; margin-bottom: 0.25rem; letter-spacing: 1px;">
+                        KAJIAN OFFLINE MMS 2026
+                    </div>
+                    <div style="font-size: 0.75rem; color: #8B7A94; margin-bottom: 1.25rem;">
+                        Muslimah Mar'ah Shalihah Daurah
+                    </div>
 
-                <!-- Ticket Info -->
-                <div
-                    style="background: var(--bg-soft-pink); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
-                        <div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Nama</div>
-                            <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ nama }}</div>
+                    <div style="border-top: 2px dashed #F2DAE8; margin: 0 -1.5rem 1.25rem;"></div>
+
+                    <div style="background: white; padding: 1rem; border-radius: 16px; display: inline-block; box-shadow: 0 2px 12px rgba(107,76,122,0.1); border: 2px solid #F2DAE8; margin-bottom: 1.25rem;">
+                        <img id="qr-display" src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="160" height="160" style="border-radius: 8px; display: block;">
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; padding: 0 0.5rem; margin-bottom: 1rem;">
+                        <div style="text-align: left;">
+                            <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Nama</div>
+                            <div style="font-weight: 600; color: #2D1B36; font-size: 0.9rem;">{{ nama }}</div>
                         </div>
-                        <div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Angkatan
-                            </div>
-                            <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">{{ angkatan }}
-                            </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Angkatan</div>
+                            <div style="font-weight: 600; color: #2D1B36; font-size: 0.9rem;">{{ angkatan }}</div>
                         </div>
                     </div>
-                    <div style="margin-top: 0.75rem; text-align: center;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem;">Kode Tiket
-                        </div>
-                        <div
-                            style="font-family: 'Poppins', monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">
-                            {{ kode }}</div>
+
+                    <div style="border-top: 2px dashed #F2DAE8; margin: 0 -1.5rem 1rem;"></div>
+
+                    <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">Kode Tiket</div>
+                    <div style="font-family: 'Poppins', monospace; font-size: 1.5rem; font-weight: 700; color: #6F2861; letter-spacing: 3px;">
+                        {{ kode }}
+                    </div>
+
+                    <div style="margin-top: 1rem; font-size: 0.68rem; color: #8B7A94;">
+                        Tunjukkan QR code ini kepada panitia saat memasuki ruangan
                     </div>
                 </div>
 
-
-                <!-- Instructions -->
+                <button onclick="downloadTiket()" class="mms-btn mms-btn-gold mms-btn-lg download-ticket-btn" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+                    <i class="fas fa-download"></i> Download Tiket
+                </button>
 
                 <a href="/daftar" class="mms-btn mms-btn-outline" style="width: 100%; justify-content: center;">
                     <i class="fas fa-plus"></i> Daftarkan Lagi
@@ -68,13 +81,173 @@
     </div>
 </div>
 
-<!-- Confetti -->
 <div class="confetti-container" id="confettiContainer"></div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    // Create confetti
+    const TICKET_NAMA = {{ nama|tojson }};
+    const TICKET_ANGKATAN = {{ angkatan|tojson }};
+    const TICKET_KODE = {{ kode|tojson }};
+
+    function downloadTiket() {
+        const btn = document.querySelector('.download-ticket-btn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+        btn.disabled = true;
+
+        const scale = 3;
+        const W = 400;
+        const H = 570;
+        const canvas = document.createElement('canvas');
+        canvas.width = W * scale;
+        canvas.height = H * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(scale, scale);
+
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        logoImg.src = "{{ url_for('static', filename='logo.png') }}";
+
+        const qrImg = new Image();
+        qrImg.src = "data:image/png;base64,{{ qr_base64 }}";
+
+        let loaded = 0;
+        function onLoad() {
+            loaded++;
+            if (loaded < 2) return;
+            drawTicket(ctx, W, H, logoImg, qrImg);
+
+            const link = document.createElement('a');
+            link.download = 'tiket-' + TICKET_KODE + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            btn.innerHTML = '<i class="fas fa-check"></i> Tersimpan!';
+            btn.style.background = 'linear-gradient(135deg, #5DAE78, #3D8B5A)';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-download"></i> Download Tiket';
+                btn.style.background = '';
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        logoImg.onload = onLoad;
+        logoImg.onerror = onLoad;
+        qrImg.onload = onLoad;
+        qrImg.onerror = onLoad;
+    }
+
+    function drawTicket(ctx, W, H, logoImg, qrImg) {
+        ctx.fillStyle = '#ffffff';
+        roundRect(ctx, 0, 0, W, H, 20);
+        ctx.fill();
+
+        ctx.strokeStyle = '#F2DAE8';
+        ctx.lineWidth = 2;
+        roundRect(ctx, 1, 1, W - 2, H - 2, 20);
+        ctx.stroke();
+
+        ctx.save();
+        roundRect(ctx, 0, 0, W, 8, 20);
+        ctx.clip();
+        const grad = ctx.createLinearGradient(0, 0, W, 0);
+        grad.addColorStop(0, '#6F2861');
+        grad.addColorStop(0.5, '#D4A843');
+        grad.addColorStop(1, '#80196D');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, 8);
+        ctx.restore();
+
+        const logoSize = 60;
+        const logoX = (W - logoSize) / 2;
+        try {
+            ctx.drawImage(logoImg, logoX, 22, logoSize, logoSize);
+        } catch(e) {}
+
+        ctx.fillStyle = '#6F2861';
+        ctx.font = 'bold 13px Poppins, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('KAJIAN OFFLINE MMS 2026', W / 2, 105);
+
+        ctx.fillStyle = '#8B7A94';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillText("Muslimah Mar'ah Shalihah Daurah", W / 2, 122);
+
+        drawDashedLine(ctx, 25, 140, W - 25, 140, '#F2DAE8');
+
+        const qrSize = 150;
+        const qrBoxPad = 12;
+        const qrBoxW = qrSize + qrBoxPad * 2;
+        const qrBoxX = (W - qrBoxW) / 2;
+        const qrBoxY = 155;
+        ctx.strokeStyle = '#F2DAE8';
+        ctx.lineWidth = 2;
+        roundRect(ctx, qrBoxX, qrBoxY, qrBoxW, qrBoxW, 14);
+        ctx.stroke();
+        try {
+            ctx.drawImage(qrImg, qrBoxX + qrBoxPad, qrBoxY + qrBoxPad, qrSize, qrSize);
+        } catch(e) {}
+
+        const infoY = qrBoxY + qrBoxW + 25;
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#8B7A94';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText('NAMA', 35, infoY);
+        ctx.fillStyle = '#2D1B36';
+        ctx.font = 'bold 13px Inter, sans-serif';
+        ctx.fillText(TICKET_NAMA, 35, infoY + 18);
+
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#8B7A94';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText('ANGKATAN', W - 35, infoY);
+        ctx.fillStyle = '#2D1B36';
+        ctx.font = 'bold 13px Inter, sans-serif';
+        ctx.fillText(TICKET_ANGKATAN, W - 35, infoY + 18);
+
+        drawDashedLine(ctx, 25, infoY + 35, W - 25, infoY + 35, '#F2DAE8');
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#8B7A94';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText('KODE TIKET', W / 2, infoY + 55);
+        ctx.fillStyle = '#6F2861';
+        ctx.font = 'bold 20px Poppins, sans-serif';
+        ctx.fillText(TICKET_KODE, W / 2, infoY + 80);
+
+        ctx.fillStyle = '#8B7A94';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText('Tunjukkan QR code ini kepada panitia', W / 2, infoY + 102);
+        ctx.fillText('saat memasuki ruangan', W / 2, infoY + 115);
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+    }
+
+    function drawDashedLine(ctx, x1, y1, x2, y2, color) {
+        ctx.save();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
     const container = document.getElementById('confettiContainer');
     const colors = ['#6B4C7A', '#D4A843', '#F2DAE8', '#5DAE78', '#E5A63B', '#9B7FAA'];
 
@@ -92,7 +265,6 @@
         container.appendChild(confetti);
     }
 
-    // Remove confetti after animation
     setTimeout(() => {
         container.style.display = 'none';
     }, 6000);
