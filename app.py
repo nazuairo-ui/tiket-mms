@@ -95,6 +95,13 @@ def get_kuota():
     setting = Setting.query.filter_by(key='kuota').first()
     return int(setting.value) if setting else 70
 
+# UMUM
+
+
+def get_kuota_umum():
+    setting = Setting.query.filter_by(key='kuota_umum').first()
+    return int(setting.value) if setting else 50
+
 
 def generate_qr_base64(data):
     img = qrcode.make(data)
@@ -204,6 +211,33 @@ def proses_daftar():
     qr_base64 = generate_qr_base64(kode_otomatis)
 
     return render_template('sukses.html', nama=nama, angkatan=pilihan_kelas,
+                           kode=kode_otomatis, qr_base64=qr_base64)
+
+
+# INI PROSES DAFTAR UMUM
+@app.route('/proses_daftar_umum', methods=['POST'])
+def proses_daftar_umum():
+    kuota = get_kuota_umum()
+    total_terdaftar = Tiket.query.count()
+    if total_terdaftar >= kuota:
+        return render_template('habis.html', kuota=kuota)
+
+    nama = sanitize_input(request.form.get('nama_input_umum', ''))
+    pilihan_umum = sanitize_input(request.form.get('kelas_input_umum', ''))
+
+    if not nama or not pilihan_umum:
+        flash('Nama dan angkatan wajib diisi!', 'danger')
+        return redirect(url_for('halaman_daftar'))
+
+    kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
+
+    peserta_baru = Tiket(nama=nama, angkatan=pilihan_umum, kode=kode_otomatis)
+    db.session.add(peserta_baru)
+    db.session.commit()
+
+    qr_base64 = generate_qr_base64(kode_otomatis)
+
+    return render_template('sukses.html', nama=nama, angkatan=pilihan_umum,
                            kode=kode_otomatis, qr_base64=qr_base64)
 
 
