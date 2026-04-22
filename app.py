@@ -93,13 +93,13 @@ def load_user(user_id):
 
 def get_kuota():
     setting = Setting.query.filter_by(key='kuota').first()
-    return int(setting.value) if setting else 70
+    return int(setting.value) if setting else 120
 
 # UMUM
 
 
-def get_kuota_umum():
-    setting = Setting.query.filter_by(key='kuota_umum').first()
+def get_limit_umum():
+    setting = Setting.query.filter_by(key='limit_umum').first()
     return int(setting.value) if setting else 50
 
 
@@ -203,6 +203,14 @@ def proses_daftar():
     if not nama or not pilihan_kelas:
         flash('Nama dan angkatan wajib diisi!', 'danger')
         return redirect(url_for('halaman_daftar'))
+
+    if pilihan_kelas.lower() == 'umum':
+        limit_umum = get_limit_umum()
+        total_umum = Tiket.query.filter_by(angkatan='umum').count()
+
+        if total_umum >= limit_umum:
+            flash('Mohon maaf, kuota khusus kategori UMUM sudah penuh!', 'warning')
+            return redirect(url_for('halaman_daftar'))
 
     kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
 
