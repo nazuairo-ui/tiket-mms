@@ -195,6 +195,11 @@ def halaman_umum_daftar():
     return render_template('daftar.html', sisa_kuota=sisa_kuota, total_terdaftar=total_terdaftar, kuota=kuota)
 
 
+@app.route('/umum_daftar')
+def halaman_umum_daftar():
+    return render_template('umum_daftar.html')
+
+
 @app.route('/proses_daftar', methods=['POST'])
 def proses_daftar():
     kuota = get_kuota()
