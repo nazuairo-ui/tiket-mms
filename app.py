@@ -95,17 +95,17 @@ def load_user(user_id):
 
 def get_kuota():
     setting = Setting.query.filter_by(key='kuota').first()
-    return int(setting.value) if setting else 3
+    return int(setting.value) if setting else 120
 
 
 def get_limit_umum():
     setting = Setting.query.filter_by(key='limit_umum').first()
-    return int(setting.value) if setting else 2
+    return int(setting.value) if setting else 50
 
 
 def get_limit_MMS():
     setting = Setting.query.filter_by(key='limit_MMS').first()
-    return int(setting.value) if setting else 5
+    return int(setting.value) if setting else 70
 
 
 def generate_qr_base64(data):
