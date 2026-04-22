@@ -217,32 +217,7 @@ def proses_daftar():
 
 
 # INI PROSES DAFTAR UMUM
-@app.route('/proses_daftar_umum', methods=['POST'])
-def proses_daftar_umum():
-    kuota = get_kuota_umum()
-    total_terdaftar = Tiket.query.count()
-    if total_terdaftar >= kuota:
-        return render_template('habis.html', kuota=kuota)
-
-    nama = sanitize_input(request.form.get('nama_input_umum', ''))
-    pilihan_umum = sanitize_input(request.form.get('kelas_input_umum', ''))
-
-    if not nama or not pilihan_umum:
-        flash('Nama dan angkatan wajib diisi!', 'danger')
-        return redirect(url_for('halaman_umum_daftar'))
-
-    kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
-
-    peserta_baru = Tiket(
-        nama_umum=nama, angkatan_umum=pilihan_umum, kode=kode_otomatis)
-    db.session.add(peserta_baru)
-    db.session.commit()
-
-    qr_base64 = generate_qr_base64(kode_otomatis)
-
-    return render_template('sukses.html', nama_umum=nama, angkatan_umum=pilihan_umum,
-                           kode=kode_otomatis, qr_base64=qr_base64)
-
+# BLM ADA
 
 @app.route('/cek', methods=['GET', 'POST'])
 def cek_tiket():
@@ -254,8 +229,8 @@ def cek_tiket():
         if tiket:
             result = {
                 'found': True,
-                'nama': tiket.nama if hasattr(tiket, 'nama') else tiket.nama_umum,
-                'angkatan': tiket.angkatan if hasattr(tiket, 'angkatan') else tiket.angkatan_umum,
+                'nama': tiket.nama,
+                'angkatan': tiket.angkatan,
                 'kode': tiket.kode,
                 'is_used': tiket.is_used,
                 'waktu_daftar': format_wib(tiket.waktu_daftar),
