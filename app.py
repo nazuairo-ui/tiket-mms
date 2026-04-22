@@ -182,10 +182,17 @@ def halaman_daftar():
         return render_template('habis.html', kuota=kuota)
     return render_template('daftar.html', sisa_kuota=sisa_kuota, total_terdaftar=total_terdaftar, kuota=kuota)
 
+# INI UMUM JUGA
+
 
 @app.route('/umum_daftar')
 def halaman_umum_daftar():
-    return render_template('umum_daftar.html')
+    kuota = get_kuota_umum()
+    total_terdaftar = Tiket.query.count()
+    sisa_kuota = max(0, kuota - total_terdaftar)
+    if total_terdaftar >= kuota:
+        return render_template('habis.html', kuota=kuota)
+    return render_template('daftar.html', sisa_kuota=sisa_kuota, total_terdaftar=total_terdaftar, kuota=kuota)
 
 
 @app.route('/proses_daftar', methods=['POST'])
@@ -231,13 +238,14 @@ def proses_daftar_umum():
 
     kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
 
-    peserta_baru = Tiket(nama=nama, angkatan=pilihan_umum, kode=kode_otomatis)
+    peserta_baru = Tiket(
+        nama_umum=nama, angkatan_umum=pilihan_umum, kode=kode_otomatis)
     db.session.add(peserta_baru)
     db.session.commit()
 
     qr_base64 = generate_qr_base64(kode_otomatis)
 
-    return render_template('sukses.html', nama=nama, angkatan=pilihan_umum,
+    return render_template('sukses.html', nama_umum=nama, angkatan_umum=pilihan_umum,
                            kode=kode_otomatis, qr_base64=qr_base64)
 
 
@@ -251,8 +259,8 @@ def cek_tiket():
         if tiket:
             result = {
                 'found': True,
-                'nama': tiket.nama,
-                'angkatan': tiket.angkatan,
+                'nama': tiket.nama if hasattr(tiket, 'nama') else tiket.nama_umum,
+                'angkatan': tiket.angkatan if hasattr(tiket, 'angkatan') else tiket.angkatan_umum,
                 'kode': tiket.kode,
                 'is_used': tiket.is_used,
                 'waktu_daftar': format_wib(tiket.waktu_daftar),
