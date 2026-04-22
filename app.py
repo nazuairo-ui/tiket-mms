@@ -227,7 +227,7 @@ def proses_daftar_umum():
 
     if not nama or not pilihan_umum:
         flash('Nama dan angkatan wajib diisi!', 'danger')
-        return redirect(url_for('halaman_daftar'))
+        return redirect(url_for('halaman_umum_daftar'))
 
     kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
 

@@ -255,9 +255,9 @@
                     <tr data-status="{% if t.is_used %}hadir{% else %}belum{% endif %}" data-nama="{{ t.nama|lower }}"
                         data-angkatan="{{ t.angkatan|lower }}" data-kode="{{ t.kode|lower }}">
                         <td>{{ loop.index }}</td>
-                        <td style="font-weight: 500;">{{ t.nama }}</td>
+                        <td style="font-weight: 500;">{{ t.nama_umum }}</td>
                         <td>
-                            <span class="mms-badge mms-badge-info">{{ t.angkatan }}</span>
+                            <span class="mms-badge mms-badge-info">{{ t.angkatan_umum }}</span>
                         </td>
                         <td style="white-space: nowrap;">
                             <code
