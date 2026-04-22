@@ -62,6 +62,9 @@
                     <a href="/cek" class="nav-link {% if request.endpoint == 'cek_tiket' %}active{% endif %}">
                         <i class="fas fa-search"></i> Cek Tiket
                     </a>
+                    <a href="/scan" class="nav-link {% if request.endpoint == 'scan_qr' %}active{% endif %}">
+                        <i class="fas fa-qrcode"></i> Scan QR
+                    </a>
                     {% if current_user.is_authenticated %}
                     <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> Panitia</a>
                     {% else %}
