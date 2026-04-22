@@ -312,7 +312,7 @@
                 <tbody>
                     {% set count_umum = namespace(value=1) %}
                     {% for t in tiket %}
-                    {% if t.angkatan == 'Umum' or t.angkatan == 'Tamu' %}
+                    {% if t.angkatan == 'umum' or t.angkatan == 'Tamu' %}
                     <tr>
                         <td>{{ count_umum.value }}</td>
                         <td style="font-weight: 500;">{{ t.nama }}</td>
