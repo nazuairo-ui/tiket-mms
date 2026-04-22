@@ -209,7 +209,7 @@ def proses_daftar():
         total_umum = Tiket.query.filter_by(angkatan='umum').count()
 
         if total_umum >= limit_umum:
-            flash('Mohon maaf, kuota khusus kategori UMUM sudah penuh!', 'warning')
+            flash('Mohon maaf, kuota khusus kategori umum sudah penuh!', 'warning')
             return redirect(url_for('halaman_daftar'))
 
     kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
