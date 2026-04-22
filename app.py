@@ -90,12 +90,12 @@ class Setting(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# KUOTA
+
 
 def get_kuota():
     setting = Setting.query.filter_by(key='kuota').first()
-    return int(setting.value) if setting else 120
-
-# UMUM
+    return int(setting.value) if setting else 3
 
 
 def get_limit_umum():
