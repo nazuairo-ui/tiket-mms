@@ -23,17 +23,23 @@
 
                 <div class="mms-alert mms-alert-info" style="text-align: left; font-size: 0.82rem;">
                     <i class="fas fa-download"></i>
-                    <span><strong>Screenshot</strong> atau klik tombol <strong>Download Tiket</strong> di bawah untuk menyimpan tiket kamu.</span>
+                    <span><strong>Screenshot</strong> atau klik tombol <strong>Download Tiket</strong> di bawah untuk
+                        menyimpan tiket kamu.</span>
                 </div>
 
-                <div id="tiket-card" style="background: white; border-radius: 20px; padding: 2rem 1.5rem; border: 2px solid #F2DAE8; position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #6F2861, #D4A843, #80196D);"></div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <img src="{{ url_for('static', filename='logo.png') }}" alt="MMS Logo" style="width: 64px; height: 64px; object-fit: cover;">
+                <div id="tiket-card"
+                    style="background: white; border-radius: 20px; padding: 2rem 1.5rem; border: 2px solid #F2DAE8; position: relative; overflow: hidden;">
+                    <div
+                        style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #6F2861, #D4A843, #80196D);">
                     </div>
-                    
-                    <div style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; color: #6F2861; margin-bottom: 0.25rem; letter-spacing: 1px;">
+
+                    <div style="margin-bottom: 1rem;">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="MMS Logo"
+                            style="width: 64px; height: 64px; object-fit: cover;">
+                    </div>
+
+                    <div
+                        style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; color: #6F2861; margin-bottom: 0.25rem; letter-spacing: 1px;">
                         KAJIAN OFFLINE MMS 2026
                     </div>
                     <div style="font-size: 0.75rem; color: #8B7A94; margin-bottom: 1.25rem;">
@@ -42,25 +48,34 @@
 
                     <div style="border-top: 2px dashed #F2DAE8; margin: 0 -1.5rem 1.25rem;"></div>
 
-                    <div style="background: white; padding: 1rem; border-radius: 16px; display: inline-block; box-shadow: 0 2px 12px rgba(107,76,122,0.1); border: 2px solid #F2DAE8; margin-bottom: 1.25rem;">
-                        <img id="qr-display" src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="160" height="160" style="border-radius: 8px; display: block;">
+                    <div
+                        style="background: white; padding: 1rem; border-radius: 16px; display: inline-block; box-shadow: 0 2px 12px rgba(107,76,122,0.1); border: 2px solid #F2DAE8; margin-bottom: 1.25rem;">
+                        <img id="qr-display" src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code Tiket" width="160"
+                            height="160" style="border-radius: 8px; display: block;">
                     </div>
 
                     <div style="display: flex; justify-content: space-between; padding: 0 0.5rem; margin-bottom: 1rem;">
                         <div style="text-align: left;">
-                            <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Nama</div>
+                            <div
+                                style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Nama</div>
                             <div style="font-weight: 600; color: #2D1B36; font-size: 0.9rem;">{{ nama }}</div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Angkatan</div>
+                            <div
+                                style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Angkatan</div>
                             <div style="font-weight: 600; color: #2D1B36; font-size: 0.9rem;">{{ angkatan }}</div>
                         </div>
                     </div>
 
                     <div style="border-top: 2px dashed #F2DAE8; margin: 0 -1.5rem 1rem;"></div>
 
-                    <div style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">Kode Tiket</div>
-                    <div style="font-family: 'Poppins', monospace; font-size: 1.5rem; font-weight: 700; color: #6F2861; letter-spacing: 3px;">
+                    <div
+                        style="font-size: 0.7rem; color: #8B7A94; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Kode Tiket</div>
+                    <div
+                        style="font-family: 'Poppins', monospace; font-size: 1.5rem; font-weight: 700; color: #6F2861; letter-spacing: 3px;">
                         {{ kode }}
                     </div>
 
@@ -69,7 +84,8 @@
                     </div>
                 </div>
 
-                <button onclick="downloadTiket()" class="mms-btn mms-btn-gold mms-btn-lg download-ticket-btn" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+                <button onclick="downloadTiket()" class="mms-btn mms-btn-gold mms-btn-lg download-ticket-btn"
+                    style="width: 100%; justify-content: center; margin-top: 0.5rem;">
                     <i class="fas fa-download"></i> Download Tiket
                 </button>
 
@@ -86,9 +102,9 @@
 
 {% block scripts %}
 <script>
-    const TICKET_NAMA = {{ nama|tojson }};
-    const TICKET_ANGKATAN = {{ angkatan|tojson }};
-    const TICKET_KODE = {{ kode|tojson }};
+    const TICKET_NAMA = '{{ nama| tojson }}';
+    const TICKET_ANGKATAN = '{{ angkatan| tojson }}';
+    const TICKET_KODE = '{{ kode| tojson }}';
 
     function downloadTiket() {
         const btn = document.querySelector('.download-ticket-btn');
@@ -162,7 +178,7 @@
         const logoX = (W - logoSize) / 2;
         try {
             ctx.drawImage(logoImg, logoX, 22, logoSize, logoSize);
-        } catch(e) {}
+        } catch (e) { }
 
         ctx.fillStyle = '#6F2861';
         ctx.font = 'bold 13px Poppins, sans-serif';
@@ -186,7 +202,7 @@
         ctx.stroke();
         try {
             ctx.drawImage(qrImg, qrBoxX + qrBoxPad, qrBoxY + qrBoxPad, qrSize, qrSize);
-        } catch(e) {}
+        } catch (e) { }
 
         const infoY = qrBoxY + qrBoxW + 25;
 

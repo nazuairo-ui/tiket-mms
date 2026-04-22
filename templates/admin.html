@@ -9,7 +9,8 @@
 {% block content %}
 <div class="container" style="padding: 2rem 1rem; max-width: 1200px; margin: 0 auto;">
 
-    <div class="page-header animate-fade-in-up" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 10;">
+    <div class="page-header animate-fade-in-up"
+        style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 10;">
         <div>
             <h1><i class="fas fa-chart-pie" style="color: var(--accent-gold);"></i> Dashboard Admin
                 <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
@@ -39,7 +40,8 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;"
+        class="animate-fade-in-up">
         <div class="mms-stat-card stat-total">
             <div class="stat-icon">👥</div>
             <div class="stat-value" id="liveTotal">{{ total }}</div>
@@ -63,19 +65,27 @@
     </div>
 
     <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
-        <h4 style="margin-bottom: 1rem;"><i class="fas fa-sliders-h" style="color: var(--accent-gold);"></i> Pengaturan Kuota Pendaftaran</h4>
-        <form method="POST" action="/admin/kuota" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <h4 style="margin-bottom: 1rem;"><i class="fas fa-sliders-h" style="color: var(--accent-gold);"></i> Pengaturan
+            Kuota Pendaftaran</h4>
+        <form method="POST" action="/admin/kuota"
+            style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-10)" style="padding: 0.4rem 0.75rem; min-width: 40px;">-10</button>
-                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-1)" style="padding: 0.4rem 0.75rem; min-width: 40px;">-1</button>
-                <input type="number" name="kuota" id="kuotaInput" value="{{ kuota }}" min="1" class="mms-input" style="width: 90px; text-align: center; font-weight: 700; font-size: 1.1rem; padding: 0.5rem;">
-                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(1)" style="padding: 0.4rem 0.75rem; min-width: 40px;">+1</button>
-                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(10)" style="padding: 0.4rem 0.75rem; min-width: 40px;">+10</button>
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-10)"
+                    style="padding: 0.4rem 0.75rem; min-width: 40px;">-10</button>
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(-1)"
+                    style="padding: 0.4rem 0.75rem; min-width: 40px;">-1</button>
+                <input type="number" name="kuota" id="kuotaInput" value="{{ kuota }}" min="1" class="mms-input"
+                    style="width: 90px; text-align: center; font-weight: 700; font-size: 1.1rem; padding: 0.5rem;">
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(1)"
+                    style="padding: 0.4rem 0.75rem; min-width: 40px;">+1</button>
+                <button type="button" class="mms-btn mms-btn-outline mms-btn-sm" onclick="changeKuota(10)"
+                    style="padding: 0.4rem 0.75rem; min-width: 40px;">+10</button>
             </div>
             <button type="submit" class="mms-btn mms-btn-primary mms-btn-sm">
                 <i class="fas fa-save"></i> Simpan
             </button>
-            <span style="font-size: 0.82rem; color: var(--text-muted);">Kuota saat ini: <strong>{{ kuota }}</strong> (terisi {{ total }})</span>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Kuota saat ini: <strong>{{ kuota }}</strong>
+                (terisi {{ total }})</span>
         </form>
     </div>
 
@@ -83,14 +93,18 @@
         <h4 style="margin-bottom: 1rem;">
             <i class="fas fa-user-plus" style="color: var(--success);"></i> Registrasi Walk-in
         </h4>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">Daftarkan peserta langsung di hari H.</p>
-        <form method="POST" action="/admin/walkin" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">Daftarkan peserta langsung di hari
+            H.</p>
+        <form method="POST" action="/admin/walkin"
+            style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
             <div style="flex: 2; min-width: 160px;">
-                <label class="mms-label"><i class="fas fa-user" style="color: var(--primary-light);"></i> Nama Lengkap</label>
+                <label class="mms-label"><i class="fas fa-user" style="color: var(--primary-light);"></i> Nama
+                    Lengkap</label>
                 <input type="text" name="nama" class="mms-input" placeholder="Nama peserta" required>
             </div>
             <div style="flex: 1; min-width: 130px;">
-                <label class="mms-label"><i class="fas fa-users" style="color: var(--primary-light);"></i> Angkatan</label>
+                <label class="mms-label"><i class="fas fa-users" style="color: var(--primary-light);"></i>
+                    Angkatan</label>
                 <select name="angkatan" class="mms-select" required>
                     <option value="" selected disabled>— Pilih —</option>
                     <option value="MMS 1">MMS 1</option>
@@ -104,14 +118,16 @@
                 </select>
             </div>
             <div>
-                <button type="submit" class="mms-btn mms-btn-success mms-btn-sm" onclick="return confirm('Daftarkan peserta walk-in ini?')">
+                <button type="submit" class="mms-btn mms-btn-success mms-btn-sm"
+                    onclick="return confirm('Daftarkan peserta walk-in ini?')">
                     <i class="fas fa-user-plus"></i> Daftarkan
                 </button>
             </div>
         </form>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;" class="animate-fade-in-up">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;"
+        class="animate-fade-in-up">
         <div class="mms-chart-card">
             <h4><i class="fas fa-chart-pie" style="color: var(--primary-light);"></i> Kehadiran</h4>
             <div style="position: relative; max-width: 250px; margin: 0 auto;">
@@ -130,7 +146,8 @@
     </div>
 
     <div class="animate-fade-in-up">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
             <div class="mms-tabs" id="statusTabs">
                 <button class="mms-tab active" data-filter="semua" onclick="filterTable('semua', this)">
                     Semua <span style="font-size: 0.75rem; opacity: 0.7;">({{ total }})</span>
@@ -144,7 +161,8 @@
             </div>
             <div class="mms-search-wrapper" style="flex: 1; max-width: 300px;">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="mms-input" id="searchInput" placeholder="Cari nama, kode, angkatan..." oninput="searchTable()" style="padding-left: 2.75rem;">
+                <input type="text" class="mms-input" id="searchInput" placeholder="Cari nama, kode, angkatan..."
+                    oninput="searchTable()" style="padding-left: 2.75rem;">
             </div>
         </div>
 
@@ -164,17 +182,16 @@
                 </thead>
                 <tbody id="tableBody">
                     {% for t in tiket %}
-                    <tr data-status="{% if t.is_used %}hadir{% else %}belum{% endif %}"
-                        data-nama="{{ t.nama|lower }}"
-                        data-angkatan="{{ t.angkatan|lower }}"
-                        data-kode="{{ t.kode|lower }}">
+                    <tr data-status="{% if t.is_used %}hadir{% else %}belum{% endif %}" data-nama="{{ t.nama|lower }}"
+                        data-angkatan="{{ t.angkatan|lower }}" data-kode="{{ t.kode|lower }}">
                         <td>{{ loop.index }}</td>
                         <td style="font-weight: 500;">{{ t.nama }}</td>
                         <td>
                             <span class="mms-badge mms-badge-info">{{ t.angkatan }}</span>
                         </td>
                         <td style="white-space: nowrap;">
-                            <code style="font-weight: 600; color: var(--primary-dark); background: var(--bg-soft-pink); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.82rem; white-space: nowrap;">{{ t.kode }}</code>
+                            <code
+                                style="font-weight: 600; color: var(--primary-dark); background: var(--bg-soft-pink); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.82rem; white-space: nowrap;">{{ t.kode }}</code>
                         </td>
                         <td>
                             {% if t.is_used %}
@@ -197,13 +214,15 @@
                             <div class="action-btns">
                                 {% if t.is_used %}
                                 <form method="POST" action="/reset_tiket/{{ t.id }}" style="display: inline;">
-                                    <button type="submit" class="action-btn action-btn-reset" title="Reset tiket" onclick="return confirm('Reset tiket {{ t.kode }}?')">
+                                    <button type="submit" class="action-btn action-btn-reset" title="Reset tiket"
+                                        onclick="return confirm('Reset tiket {{ t.kode }}?')">
                                         <i class="fas fa-undo"></i>
                                     </button>
                                 </form>
                                 {% endif %}
                                 <form method="POST" action="/hapus_tiket/{{ t.id }}" style="display: inline;">
-                                    <button type="submit" class="action-btn action-btn-delete" title="Hapus tiket" onclick="return confirm('Hapus tiket {{ t.kode }}? Data tidak bisa dikembalikan!')">
+                                    <button type="submit" class="action-btn action-btn-delete" title="Hapus tiket"
+                                        onclick="return confirm('Hapus tiket {{ t.kode }}? Data tidak bisa dikembalikan!')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -214,6 +233,78 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- INI UMUM -->
+
+        <div class="mms-table-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table class="mms-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Peserta</th>
+                        <th>Kode</th>
+                        <th>Status</th>
+                        <th>Waktu Daftar</th>
+                        <th>Waktu Scan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for t in tiket %}
+                    <tr data-status="{% if t.is_used %}hadir{% else %}belum{% endif %}" data-nama="{{ t.nama|lower }}"
+                        data-angkatan="{{ t.angkatan|lower }}" data-kode="{{ t.kode|lower }}">
+                        <td>{{ loop.index }}</td>
+                        <td style="font-weight: 500;">{{ t.nama }}</td>
+                        <td>
+                            <span class="mms-badge mms-badge-info">{{ t.angkatan }}</span>
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <code
+                                style="font-weight: 600; color: var(--primary-dark); background: var(--bg-soft-pink); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.82rem; white-space: nowrap;">{{ t.kode }}</code>
+                        </td>
+                        <td>
+                            {% if t.is_used %}
+                            <span class="mms-badge mms-badge-success">
+                                <i class="fas fa-check-circle"></i> Hadir
+                            </span>
+                            {% else %}
+                            <span class="mms-badge mms-badge-warning">
+                                <i class="fas fa-clock"></i> Belum
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">
+                            {{ t.waktu_daftar|wib }}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">
+                            {{ t.waktu_scan|wib }}
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                {% if t.is_used %}
+                                <form method="POST" action="/reset_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-reset" title="Reset tiket"
+                                        onclick="return confirm('Reset tiket {{ t.kode }}?')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <form method="POST" action="/hapus_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-delete" title="Hapus tiket"
+                                        onclick="return confirm('Hapus tiket {{ t.kode }}? Data tidak bisa dikembalikan!')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- INI UMUM-->
 
         {% if not tiket %}
         <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
@@ -247,7 +338,7 @@
         document.getElementById('exportMenu').classList.toggle('show');
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!e.target.closest('.export-dropdown')) {
             document.getElementById('exportMenu').classList.remove('show');
         }
