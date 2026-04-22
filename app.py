@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-import pytz
+from zoneinfo import ZoneInfo
 import uuid
 import os
 import io
@@ -21,19 +21,22 @@ app.config['SECRET_KEY'] = 'mms-kajian-secret-key-2026'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-WIB = pytz.timezone('Asia/Jakarta')
+WIB = ZoneInfo('Asia/Jakarta')
+
 
 def wib_now():
     return datetime.now(WIB)
+
 
 def format_wib(dt):
     if dt is None:
         return '-'
     if dt.tzinfo is None:
-        dt = WIB.localize(dt)
+        dt = dt.replace(tzinfo=WIB)
     else:
         dt = dt.astimezone(WIB)
     return dt.strftime('%d/%m/%Y %H:%M WIB')
+
 
 @app.template_filter('wib')
 def wib_filter(dt):
@@ -46,6 +49,7 @@ def sanitize_input(text, max_length=100):
     cleaned = re.sub(r'<[^>]+>', '', text)
     cleaned = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', cleaned)
     return cleaned.strip()[:max_length]
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -225,6 +229,11 @@ def form_data_diri():
     return render_template('form.html')
 
 
+@app.route('/form_umum')
+def form_umum():
+    return render_template('form_umum.html')
+
+
 @app.route('/whatsapp')
 def redirect_whatsapp():
     return render_template('whatsapp.html')
@@ -278,10 +287,12 @@ def walkin_register():
 
     kode = "WLK-" + str(uuid.uuid4()).upper()[:4]
     now = wib_now()
-    peserta = Tiket(nama=nama, angkatan=angkatan, kode=kode, is_used=True, waktu_daftar=now, waktu_scan=now)
+    peserta = Tiket(nama=nama, angkatan=angkatan, kode=kode,
+                    is_used=True, waktu_daftar=now, waktu_scan=now)
     db.session.add(peserta)
     db.session.commit()
-    flash(f'Walk-in berhasil! {nama} ({angkatan}) terdaftar dengan kode {kode}.', 'success')
+    flash(
+        f'Walk-in berhasil! {nama} ({angkatan}) terdaftar dengan kode {kode}.', 'success')
     return redirect(url_for('admin'))
 
 

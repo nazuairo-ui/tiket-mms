@@ -5,4 +5,3 @@ openpyxl
 reportlab
 qrcode
 Pillow
-pytz
