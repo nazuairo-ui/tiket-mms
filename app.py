@@ -210,7 +210,7 @@ def proses_daftar():
         return redirect(url_for('halaman_daftar'))
 
     # Thalibaat
-    if pilihan_kelas_clean in list_mms:
+    if pilihan_kelas.lower() in ['mms 1', 'mms 2', 'mms 3', 'mms 4', 'mms 5', 'mms 6', 'pengurus']:
         limit_MMS = get_limit_MMS()
         total_MMS = Tiket.query.filter(Tiket.angkatan.in_([
             'MMS 1', 'MMS 2', 'MMS 3', 'MMS 4', 'MMS 5', 'MMS 6', 'Pengurus'
