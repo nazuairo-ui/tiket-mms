@@ -187,16 +187,6 @@ def halaman_daftar():
 
 @app.route('/umum_daftar')
 def halaman_umum_daftar():
-    kuota = get_kuota_umum()
-    total_terdaftar = Tiket.query.count()
-    sisa_kuota = max(0, kuota - total_terdaftar)
-    if total_terdaftar >= kuota:
-        return render_template('habis.html', kuota=kuota)
-    return render_template('daftar.html', sisa_kuota=sisa_kuota, total_terdaftar=total_terdaftar, kuota=kuota)
-
-
-@app.route('/umum_daftar')
-def halaman_umum_daftar():
     return render_template('umum_daftar.html')
 
 
