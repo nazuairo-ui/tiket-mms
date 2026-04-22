@@ -103,6 +103,11 @@ def get_limit_umum():
     return int(setting.value) if setting else 2
 
 
+def get_limit_MMS():
+    setting = Setting.query.filter_by(key='limit_MMS').first()
+    return int(setting.value) if setting else 5
+
+
 def generate_qr_base64(data):
     img = qrcode.make(data)
     buffer = io.BytesIO()
@@ -203,6 +208,16 @@ def proses_daftar():
     if not nama or not pilihan_kelas:
         flash('Nama dan angkatan wajib diisi!', 'danger')
         return redirect(url_for('halaman_daftar'))
+
+    # Thalibaat
+    if pilihan_kelas.lower() == 'MMS 1, MMS 2, MMS 3, MMS 4, MMS 5, MMS 6, Pengurus':
+        limit_MMS = get_limit_MMS()
+        total_MMS = Tiket.query.filter_by(
+            angkatan='MMS 1, MMS 2, MMS 3, MMS 4, MMS 5, MMS 6, Pengurus').count()
+
+        if total_MMS >= limit_MMS:
+            flash('Mohon maaf, kuota khusus kategori umum sudah penuh!', 'warning')
+            return redirect(url_for('halaman_daftar'))
 
     if pilihan_kelas.lower() == 'umum':
         limit_umum = get_limit_umum()
