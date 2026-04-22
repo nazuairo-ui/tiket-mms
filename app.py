@@ -141,6 +141,7 @@ def logout():
 
 
 @app.route('/scan')
+@login_required
 def home():
     if not current_user.is_authenticated:
         return redirect(url_for('halaman_daftar'))
