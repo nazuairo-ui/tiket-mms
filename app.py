@@ -100,7 +100,7 @@ def get_kuota():
 
 def get_limit_umum():
     setting = Setting.query.filter_by(key='limit_umum').first()
-    return int(setting.value) if setting else 50
+    return int(setting.value) if setting else 2
 
 
 def generate_qr_base64(data):
