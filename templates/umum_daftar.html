@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Daftar Tiket — Kajian Offline MMS 2026{% endblock %}
+
+{% block content %}
+<div class="fullpage-center" style="padding-top: 1rem; padding-bottom: 3rem;">
+    <div class="envelope-card">
+        <div style="text-align: center; position: relative; z-index: 1;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎟️</div>
+            <h2 style="font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 0.25rem;">
+                Tiket Kajian Offline MMS
+            </h2>
+
+            <p
+                style="color: var(--accent-gold); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; margin-bottom: 1rem;">
+                2026
+            </p>
+            <div class="divider"></div>
+
+            <form action="/proses_daftar" method="POST" id="formDaftar">
+                <div style="margin-bottom: 1rem; text-align: left;">
+                    <label class="mms-label">
+                        <i class="fas fa-user" style="color: var(--primary-light);"></i> Nama Lengkap
+                    </label>
+                    <input type="text" name="nama_input" class="mms-input" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div style="margin-bottom: 1.5rem; text-align: left;">
+                    <label class="mms-label">
+                        <i class="fas fa-users" style="color: var(--primary-light);"></i> Peserta
+                    </label>
+                    <select name="kelas_input" class="mms-select" required>
+                        <option value="" selected disabled>— Pilih Disini —</option>
+                        <option value="MMS 1">Umum</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="mms-btn mms-btn-primary mms-btn-lg"
+                    style="width: 100%; justify-content: center;">
+                    <i class="fas fa-ticket"></i> Dapatkan Tiket
+                </button>
+            </form>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1.25rem; line-height: 1.5;">
+                <i class="fas fa-info-circle"></i> Setelah mendaftar, <b>Screenshot QR Code</b> dan tunjukkan kepada
+                panitia saat hendak memasuki ruangan.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
