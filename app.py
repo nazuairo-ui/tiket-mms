@@ -210,13 +210,14 @@ def proses_daftar():
         return redirect(url_for('halaman_daftar'))
 
     # Thalibaat
-    if pilihan_kelas.lower() == 'MMS 1, MMS 2, MMS 3, MMS 4, MMS 5, MMS 6, Pengurus':
+    if pilihan_kelas_clean in list_mms:
         limit_MMS = get_limit_MMS()
-        total_MMS = Tiket.query.filter_by(
-            angkatan='MMS 1, MMS 2, MMS 3, MMS 4, MMS 5, MMS 6, Pengurus').count()
+        total_MMS = Tiket.query.filter(Tiket.angkatan.in_([
+            'MMS 1', 'MMS 2', 'MMS 3', 'MMS 4', 'MMS 5', 'MMS 6', 'Pengurus'
+        ])).count()
 
         if total_MMS >= limit_MMS:
-            flash('Mohon maaf, kuota khusus kategori umum sudah penuh!', 'warning')
+            flash('Mohon maaf, kuota khusus Thalibaat sudah penuh!', 'warning')
             return redirect(url_for('halaman_daftar'))
 
     if pilihan_kelas.lower() == 'umum':
@@ -224,7 +225,7 @@ def proses_daftar():
         total_umum = Tiket.query.filter_by(angkatan='umum').count()
 
         if total_umum >= limit_umum:
-            flash('Mohon maaf, kuota khusus kategori umum sudah penuh!', 'warning')
+            flash('Mohon maaf, kuota khusus kategori Umum sudah penuh!', 'warning')
             return redirect(url_for('halaman_daftar'))
 
     kode_otomatis = "MMS-" + str(uuid.uuid4()).upper()[:4]
