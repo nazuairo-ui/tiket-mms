@@ -64,6 +64,7 @@
         </div>
     </div>
 
+    <!-- KUOTA
     <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
         <h4 style="margin-bottom: 1rem;"><i class="fas fa-sliders-h" style="color: var(--accent-gold);"></i> Pengaturan
             Kuota Pendaftaran</h4>
@@ -87,8 +88,9 @@
             <span style="font-size: 0.82rem; color: var(--text-muted);">Kuota saat ini: <strong>{{ kuota }}</strong>
                 (terisi {{ total }})</span>
         </form>
-    </div>
+    </div> -->
 
+    <!--
     <div class="mms-chart-card animate-fade-in-up walkin-card" style="margin-bottom: 2rem;">
         <h4 style="margin-bottom: 1rem;">
             <i class="fas fa-user-plus" style="color: var(--success);"></i> Registrasi Walk-in
@@ -114,7 +116,7 @@
                     <option value="MMS 5">MMS 5</option>
                     <option value="MMS 6">MMS 6</option>
                     <option value="Pengurus">Pengurus</option>
-                    <option value="Tamu">Tamu</option>
+                    <option value="Tamu">Peserta Umum</option>
                 </select>
             </div>
             <div>
@@ -232,19 +234,131 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div> -->
+
+    <div class="mms-chart-card animate-fade-in-up" style="margin-bottom: 2rem;">
+        <h4 style="margin-bottom: 1.5rem;">
+            <i class="fas fa-graduation-cap" style="color: var(--primary-light);"></i>
+            Data Peserta Thalibaat (MMS & Pengurus)
+        </h4>
+        <div class="mms-table-wrapper" style="overflow-x: auto;">
+            <table class="mms-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Angkatan</th>
+                        <th>Kode</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set count_mms = namespace(value=1) %}
+                    {% for t in tiket %}
+                    {% if t.angkatan in ['MMS 1', 'MMS 2', 'MMS 3', 'MMS 4', 'MMS 5', 'MMS 6', 'Pengurus'] %}
+                    <tr>
+                        <td>{{ count_mms.value }}</td>
+                        <td style="font-weight: 500;">{{ t.nama }}</td>
+                        <td><span class="mms-badge mms-badge-info">{{ t.angkatan }}</span></td>
+                        <td><code>{{ t.kode }}</code></td>
+                        <td>
+                            {% if t.is_used %}
+                            <span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>
+                            {% else %}
+                            <span class="mms-badge mms-badge-warning"><i class="fas fa-clock"></i> Belum</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                {% if t.is_used %}
+                                <form method="POST" action="/reset_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-reset"
+                                        onclick="return confirm('Reset tiket?')"><i class="fas fa-undo"></i></button>
+                                </form>
+                                {% endif %}
+                                <form method="POST" action="/hapus_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-delete"
+                                        onclick="return confirm('Hapus data?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% set count_mms.value = count_mms.value + 1 %}
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-        <!-- INI UMUM -->
-
-        <!-- INI UMUM-->
-
-        {% if not tiket %}
-        <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
-            <p>Belum ada data tiket terdaftar.</p>
-        </div>
-        {% endif %}
     </div>
+
+    <div class="mms-chart-card animate-fade-in-up">
+        <h4 style="margin-bottom: 1.5rem;">
+            <i class="fas fa-users" style="color: var(--primary-light);"></i>
+            Data Peserta Umum
+        </h4>
+        <div class="mms-table-wrapper" style="overflow-x: auto;">
+            <table class="mms-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Kategori</th>
+                        <th>Kode</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set count_umum = namespace(value=1) %}
+                    {% for t in tiket %}
+                    {% if t.angkatan == 'Tamu' %}
+                    <tr>
+                        <td>{{ count_umum.value }}</td>
+                        <td style="font-weight: 500;">{{ t.nama }}</td>
+                        <td><span class="mms-badge" style="background: #e9ecef; color: #495057;">Umum</span></td>
+                        <td><code>{{ t.kode }}</code></td>
+                        <td>
+                            {% if t.is_used %}
+                            <span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>
+                            {% else %}
+                            <span class="mms-badge mms-badge-warning"><i class="fas fa-clock"></i> Belum</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                {% if t.is_used %}
+                                <form method="POST" action="/reset_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-reset"
+                                        onclick="return confirm('Reset?')"><i class="fas fa-undo"></i></button>
+                                </form>
+                                {% endif %}
+                                <form method="POST" action="/hapus_tiket/{{ t.id }}" style="display: inline;">
+                                    <button type="submit" class="action-btn action-btn-delete"
+                                        onclick="return confirm('Hapus?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% set count_umum.value = count_umum.value + 1 %}
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- INI UMUM -->
+
+    <!-- INI UMUM-->
+
+    {% if not tiket %}
+    <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+        <p>Belum ada data tiket terdaftar.</p>
+    </div>
+    {% endif %}
+</div>
 </div>
 
 <div class="mms-modal-overlay" id="resetAllModal">
