@@ -161,6 +161,7 @@
                         <th>Kode</th>
                         <th>Status</th>
                         <th>Action</th>
+                        <th>Sinkron</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -192,6 +193,9 @@
                                         onclick="return confirm('Hapus?')"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" {% if t.is_used %}checked{% endif %}>
                         </td>
                     </tr>
                     {% set count_umum.value = count_umum.value + 1 %}
