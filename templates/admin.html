@@ -203,8 +203,8 @@
                         </td>
                         <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.waktu_scan }}</td>
                         <td style="text-align: center;">
-                            <input type="checkbox" class="update-checkbox" data-id="{{ t.id }}" {% if t.is_used
-                                %}checked{% endif %}">
+                            <input type="checkbox" class="update-check" data-id="{{ t.id }}" {% if t.is_used %}checked{%
+                                endif %}">
                         </td>
                     </tr>
                     {% set count_umum.value = count_umum.value + 1 %}
@@ -583,19 +583,26 @@
 <script>
     document.querySelectorAll('.update-check').forEach(box => {
         box.addEventListener('change', function () {
+            const tiketId = this.getAttribute('data-id');
+            const statusCheck = this.checked;
+
             fetch('/update_status_aman', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: this.getAttribute('data-id'),
-                    status: this.checked
-                })
+                body: JSON.stringify({ id: tiketId, status: statusCheck })
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (!data.success) alert('Gagal menyimpan perubahan');
+                    if (data.success) {
+                        console.log("Berhasil simpan ke database!");
+                    } else {
+                        alert("Gagal update di server");
+                    }
                 })
-                .catch(() => alert('Terjadi kesalahan jaringan'));
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("Koneksi bermasalah!");
+                });
         });
     });
 </script>
