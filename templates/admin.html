@@ -105,6 +105,8 @@
                         <th>Kode</th>
                         <th>Status</th>
                         <th>Action</th>
+                        <th>Waktu Scan</th>
+                        <th>Sinkron</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,6 +139,10 @@
                                 </form>
                             </div>
                         </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.waktu_scan }}</td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" {% if t.is_used %}checked{% endif %}>
+                        </td>
                     </tr>
                     {% set count_mms.value = count_mms.value + 1 %}
                     {% endif %}
@@ -161,6 +167,7 @@
                         <th>Kode</th>
                         <th>Status</th>
                         <th>Action</th>
+                        <th>Waktu Scan</th>
                         <th>Sinkron</th>
                     </tr>
                 </thead>
@@ -194,6 +201,7 @@
                                 </form>
                             </div>
                         </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.waktu_scan }}</td>
                         <td style="text-align: center;">
                             <input type="checkbox" {% if t.is_used %}checked{% endif %}>
                         </td>
