@@ -414,7 +414,7 @@ def export_excel():
     )
 
     headers = ['No', 'Nama', 'Angkatan', 'Kode Tiket',
-               'Status', 'Waktu Daftar', 'Waktu Scan']
+               'Status', 'Waktu Daftar', 'Waktu Scan', 'Sinkron']
     for col, header in enumerate(headers, 1):
         cell = ws.cell(row=1, column=col, value=header)
         cell.font = header_font
@@ -435,7 +435,8 @@ def export_excel():
             '%d/%m/%Y %H:%M') if t.waktu_daftar else '-').border = thin_border
         ws.cell(row=row, column=7, value=t.waktu_scan.strftime(
             '%d/%m/%Y %H:%M') if t.waktu_scan else '-').border = thin_border
-
+        ws.cell(row=row, column=8,
+                value='Sudah' if t.is_used else 'Belum').border = thin_border
         status_cell = ws.cell(row=row, column=5)
         if t.is_used:
             status_cell.fill = PatternFill(
@@ -444,7 +445,7 @@ def export_excel():
             status_cell.fill = PatternFill(
                 start_color="FFF3CD", end_color="FFF3CD", fill_type="solid")
 
-    for col in range(1, 8):
+    for col in range(1, 9):
         max_len = max(len(str(ws.cell(row=r, column=col).value or ''))
                       for r in range(1, len(tikets) + 2))
         ws.column_dimensions[chr(64 + col)].width = max(max_len + 4, 12)
@@ -482,17 +483,18 @@ def export_pdf():
 
     tikets = Tiket.query.order_by(Tiket.waktu_daftar.desc()).all()
     data = [['No', 'Nama', 'Angkatan', 'Kode Tiket',
-             'Status', 'Waktu Daftar', 'Waktu Scan']]
+             'Status', 'Waktu Daftar', 'Waktu Scan', 'Sinkron']]
     for i, t in enumerate(tikets, 1):
         data.append([
             str(i), t.nama, t.angkatan, t.kode,
             'Hadir' if t.is_used else 'Belum Hadir',
             t.waktu_daftar.strftime(
                 '%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
-            t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-'
+            t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-',
+            'Sudah' if t.is_used else 'Belum'
         ])
 
-    col_widths = [30, 140, 70, 80, 70, 100, 100]
+    col_widths = [30, 140, 70, 80, 70, 100, 100, 100]
     table = Table(data, colWidths=col_widths)
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#6B4C7A')),
