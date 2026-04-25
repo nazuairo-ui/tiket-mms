@@ -44,21 +44,6 @@ def wib_filter(dt):
     return format_wib(dt)
 
 
-@app.route('/update_status_aman', methods=['POST'])
-def update_status_aman():
-    try:
-        data = request.get_json()
-        tiket = Tiket.query.get(data.get('id'))
-        if tiket:
-            tiket.is_used = data.get('status')
-            db.session.commit()
-            return jsonify({'success': True}), 200
-        return jsonify({'success': False}), 404
-    except Exception:
-        db.session.rollback()
-        return jsonify({'success': False}), 500
-
-
 def sanitize_input(text, max_length=100):
     if not text:
         return ''
