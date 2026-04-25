@@ -610,23 +610,12 @@ with app.app_context():
 
 @app.route('/update_status_aman', methods=['POST'])
 def update_status_aman():
-    try:
-        data = request.get_json()
-        tiket_id = data.get('id')
-        status_baru = data.get('status')
-
-        tiket = Tiket.query.get(tiket_id)
-
-        if tiket:
-            tiket.is_used = status_baru
-            db.session.commit()
-            return jsonify({'success': True}), 200
-
-        return jsonify({'success': False, 'error': 'Data tidak ditemukan'}), 404
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'success': False, 'error': str(e)}), 500
+    data = request.get_json()
+    tiket = Tiket.query.get(data.get('id'))
+    if tiket:
+        tiket.is_used = data.get('status')
+        db.session.commit()
+    return jsonify({'success': False}), 404
 
 
 if __name__ == '__main__':
