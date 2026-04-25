@@ -470,6 +470,7 @@ def export_pdf():
     from reportlab.lib.styles import getSampleStyleSheet
     from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
     from reportlab.lib.units import mm
+    import io
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(
@@ -485,13 +486,14 @@ def export_pdf():
     data = [['No', 'Nama', 'Angkatan', 'Kode Tiket',
              'Status', 'Waktu Daftar', 'Waktu Scan', 'Sinkron']]
     for i, t in enumerate(tikets, 1):
+        status_sinkron = 'Aman' if t.is_used else 'Belum'
         data.append([
             str(i), t.nama, t.angkatan, t.kode,
             'Hadir' if t.is_used else 'Belum Hadir',
             t.waktu_daftar.strftime(
                 '%d/%m/%Y %H:%M') if t.waktu_daftar else '-',
             t.waktu_scan.strftime('%d/%m/%Y %H:%M') if t.waktu_scan else '-',
-            'Sudah' if t.is_used else 'Belum'
+            status_sinkron
         ])
 
     col_widths = [30, 140, 70, 80, 70, 100, 100, 100]
@@ -507,6 +509,7 @@ def export_pdf():
         ('FONTSIZE', (0, 1), (-1, -1), 9),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1),
          [colors.white, colors.HexColor('#F9F0F7')]),
+        ('TEXTCOLOR', (8, 1), (8, -1), colors.green)
     ]))
     elements.append(table)
 
