@@ -203,7 +203,8 @@
                         </td>
                         <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.waktu_scan }}</td>
                         <td style="text-align: center;">
-                            <input type="checkbox" {% if t.is_used %}checked{% endif %}>
+                            <input type="checkbox" class="update-checkbox" data-tiket-id="{{ t.id }}" {% if t.is_used
+                                %}checked{% endif %}">
                         </td>
                     </tr>
                     {% set count_umum.value = count_umum.value + 1 %}
@@ -577,4 +578,30 @@
 
     setInterval(updateLiveStats, 5000);
 </script>
+
+</table>
+<script>
+    document.querySelectorAll('.update-check').forEach(box => {
+        box.addEventListener('change', function () {
+            fetch('/update_status_aman', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: this.getAttribute('data-id'),
+                    status: this.checked
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) alert('Gagal menyimpan perubahan');
+                })
+                .catch(() => alert('Terjadi kesalahan jaringan'));
+        });
+    });
+</script>
+
+</body>
+
+</html>
+
 {% endblock %}

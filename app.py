@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from flask import request, jsonify
 import uuid
 import os
 import io
@@ -41,6 +42,21 @@ def format_wib(dt):
 @app.template_filter('wib')
 def wib_filter(dt):
     return format_wib(dt)
+
+
+@app.route('/update_status_aman', methods=['POST'])
+def update_status_aman():
+    try:
+        data = request.get_json()
+        tiket = Tiket.query.get(data.get('id'))
+        if tiket:
+            tiket.is_used = data.get('status')
+            db.session.commit()
+            return jsonify({'success': True}), 200
+        return jsonify({'success': False}), 404
+    except Exception:
+        db.session.rollback()
+        return jsonify({'success': False}), 500
 
 
 def sanitize_input(text, max_length=100):
