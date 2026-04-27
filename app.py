@@ -96,12 +96,12 @@ def load_user(user_id):
 
 def get_kuota():
     setting = Setting.query.filter_by(key='kuota').first()
-    return int(setting.value) if setting else 185
+    return int(setting.value) if setting else 285
 
 
 def get_limit_umum():
     setting = Setting.query.filter_by(key='limit_umum').first()
-    return int(setting.value) if setting else 115
+    return int(setting.value) if setting else 215
 
 
 def get_limit_MMS():
