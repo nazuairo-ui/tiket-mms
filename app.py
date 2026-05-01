@@ -600,7 +600,34 @@ def update_status_aman():
     if tiket:
         tiket.is_used = data.get('status')
         db.session.commit()
+        return jsonify({'success': True})
     return jsonify({'success': False}), 404
+
+
+@app.route('/hadirkan_manual', methods=['POST'])
+@login_required
+def hadirkan_manual():
+    data = request.get_json()
+    tiket_id = data.get('id')
+    tiket = Tiket.query.get(tiket_id)
+    if not tiket:
+        return jsonify({'success': False, 'message': 'Tiket tidak ditemukan'}), 404
+    if tiket.is_used:
+        return jsonify({'success': False, 'message': 'Peserta sudah dihadirkan'}), 400
+    tiket.is_used = True
+    tiket.waktu_scan = wib_now()
+    db.session.commit()
+    return jsonify({'success': True, 'message': f'{tiket.nama} berhasil dihadirkan'})
+
+
+@app.route('/hapus_semua_peserta', methods=['POST'])
+@login_required
+def hapus_semua_peserta():
+    count = Tiket.query.count()
+    Tiket.query.delete()
+    db.session.commit()
+    flash(f'Semua data peserta ({count} orang) berhasil dihapus!', 'success')
+    return redirect(url_for('admin'))
 
 
 if __name__ == '__main__':

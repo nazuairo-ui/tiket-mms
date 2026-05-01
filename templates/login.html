@@ -82,32 +82,6 @@
             }
         }
     </script>
-
-    <script>
-        document.querySelectorAll('.update-checkbox').forEach(box => {
-            box.addEventListener('change', function () {
-                // Ambil ID dan status (centang atau nggak)
-                const id = this.getAttribute('data-tiket-id');
-                const status = this.checked;
-
-                // Kirim laporan ke Flask
-                fetch('/update_status_aman', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: id, status: status })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log("Database sudah update!");
-                    })
-                    .catch(err => {
-                        alert("Gagal simpan! Cek koneksi.");
-                        console.error(err);
-                    });
-            });
-        });
-    </script>
-
 </body>
 
 </html>
