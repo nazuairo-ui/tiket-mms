@@ -1088,6 +1088,32 @@ a:hover {
     color: var(--danger);
 }
 
+.action-btn-hadir {
+    background: var(--success-bg);
+    color: var(--success);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.action-btn-hadir:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(93, 174, 120, 0.4);
+}
+
+.action-btn-hadir:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .navbar-logo {
     width: 34px;
     height: 34px;
