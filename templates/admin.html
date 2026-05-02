@@ -37,7 +37,8 @@
             <button class="mms-btn mms-btn-danger mms-btn-sm" onclick="showResetAllModal()">
                 <i class="fas fa-redo"></i> Reset Semua
             </button>
-            <button class="mms-btn mms-btn-danger mms-btn-sm" onclick="showHapusSemuaModal()" style="background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);">
+            <button class="mms-btn mms-btn-danger mms-btn-sm" onclick="showHapusSemuaModal()"
+                style="background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);">
                 <i class="fas fa-trash-alt"></i> Hapus Semua Peserta
             </button>
         </div>
@@ -107,6 +108,7 @@
                         <th>Angkatan</th>
                         <th>Kode</th>
                         <th>Status</th>
+                        <th>Waktu Daftar</th>
                         <th>Waktu Scan</th>
                         <th>Action</th>
                     </tr>
@@ -136,7 +138,8 @@
                                         onclick="return confirm('Reset tiket?')"><i class="fas fa-undo"></i></button>
                                 </form>
                                 {% else %}
-                                <button class="action-btn action-btn-hadir" onclick="hadirkanManual({{ t.id }}, this)" title="Hadirkan peserta">
+                                <button class="action-btn action-btn-hadir" onclick="hadirkanManual('{{ t.id }}', this)"
+                                    title="Hadirkan peserta">
                                     <i class="fas fa-user-check"></i>
                                 </button>
                                 {% endif %}
@@ -169,6 +172,7 @@
                         <th>Kategori</th>
                         <th>Kode</th>
                         <th>Status</th>
+                        <th>Waktu Daftar</th>
                         <th>Waktu Scan</th>
                         <th>Action</th>
                     </tr>
@@ -198,7 +202,8 @@
                                         onclick="return confirm('Reset?')"><i class="fas fa-undo"></i></button>
                                 </form>
                                 {% else %}
-                                <button class="action-btn action-btn-hadir" onclick="hadirkanManual({{ t.id }}, this)" title="Hadirkan peserta">
+                                <button class="action-btn action-btn-hadir" onclick="hadirkanManual('{{ t.id }}', this)"
+                                    title="Hadirkan peserta">
                                     <i class="fas fa-user-check"></i>
                                 </button>
                                 {% endif %}
@@ -250,11 +255,13 @@
     <div class="mms-modal">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🗑️</div>
         <h3>Hapus Semua Peserta?</h3>
-        <p style="color: var(--danger); font-weight: 600;">PERHATIAN: Semua data peserta akan dihapus permanen dan tidak bisa dikembalikan!</p>
+        <p style="color: var(--danger); font-weight: 600;">PERHATIAN: Semua data peserta akan dihapus permanen dan tidak
+            bisa dikembalikan!</p>
         <div class="modal-actions">
             <button class="mms-btn mms-btn-outline" onclick="hideHapusSemuaModal()">Batal</button>
             <form method="POST" action="/hapus_semua_peserta" style="display: inline;">
-                <button type="submit" class="mms-btn mms-btn-danger" style="background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);">
+                <button type="submit" class="mms-btn mms-btn-danger"
+                    style="background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);">
                     <i class="fas fa-trash-alt"></i> Ya, Hapus Semua
                 </button>
             </form>
@@ -618,43 +625,43 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: tiketId })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                const td = btnElement.parentElement;
-                td.innerHTML = '<span class="mms-badge mms-badge-success" style="font-size: 0.72rem;"><i class="fas fa-check"></i> Sudah</span>';
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const td = btnElement.parentElement;
+                    td.innerHTML = '<span class="mms-badge mms-badge-success" style="font-size: 0.72rem;"><i class="fas fa-check"></i> Sudah</span>';
 
-                const row = td.parentElement;
-                const statusCell = row.querySelector('td:nth-child(5)');
-                if (statusCell) {
-                    statusCell.innerHTML = '<span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>';
-                }
+                    const row = td.parentElement;
+                    const statusCell = row.querySelector('td:nth-child(5)');
+                    if (statusCell) {
+                        statusCell.innerHTML = '<span class="mms-badge mms-badge-success"><i class="fas fa-check-circle"></i> Hadir</span>';
+                    }
 
-                const actionCell = row.querySelector('td:nth-child(7)');
-                if (actionCell) {
-                    const existingDelete = actionCell.querySelector('form[action*="hapus_tiket"]');
-                    const deleteHtml = existingDelete ? existingDelete.outerHTML : '';
-                    actionCell.innerHTML = `<div class="action-btns">
+                    const actionCell = row.querySelector('td:nth-child(7)');
+                    if (actionCell) {
+                        const existingDelete = actionCell.querySelector('form[action*="hapus_tiket"]');
+                        const deleteHtml = existingDelete ? existingDelete.outerHTML : '';
+                        actionCell.innerHTML = `<div class="action-btns">
                         <form method="POST" action="/reset_tiket/${tiketId}" style="display: inline;">
                             <button type="submit" class="action-btn action-btn-reset" onclick="return confirm('Reset tiket?')"><i class="fas fa-undo"></i></button>
                         </form>
                         ${deleteHtml}
                     </div>`;
-                }
+                    }
 
-                updateLiveStats();
-            } else {
-                alert('Gagal menghadirkan peserta: ' + (data.message || 'Unknown error'));
+                    updateLiveStats();
+                } else {
+                    alert('Gagal menghadirkan peserta: ' + (data.message || 'Unknown error'));
+                    btnElement.disabled = false;
+                    btnElement.innerHTML = '<i class="fas fa-user-check"></i>';
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Koneksi bermasalah!');
                 btnElement.disabled = false;
                 btnElement.innerHTML = '<i class="fas fa-user-check"></i>';
-            }
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Koneksi bermasalah!');
-            btnElement.disabled = false;
-            btnElement.innerHTML = '<i class="fas fa-user-check"></i>';
-        });
+            });
     }
 </script>
 
